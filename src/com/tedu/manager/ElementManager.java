@@ -45,5 +45,6 @@ public class ElementManager {
 		gameElements.put(GameElement.PLAY, new ArrayList<ElementObj>());
 		gameElements.put(GameElement.MAPS, new ArrayList<ElementObj>());
 		gameElements.put(GameElement.ENEMY, new ArrayList<ElementObj>());
+        gameElements.put(GameElement.BOSS, new ArrayList<ElementObj>());
     }
 }
