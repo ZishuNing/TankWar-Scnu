@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @说明 单例元素管理器
+ * 单例元素管理器
  * @author NZS
  */
 public class ElementManager {
