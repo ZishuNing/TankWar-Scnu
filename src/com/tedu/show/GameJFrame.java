@@ -38,6 +38,12 @@ public class GameJFrame extends JFrame {
         }
 //		界面的刷新
         this.setVisible(true);//显示界面
+        //如果jPanel是runnable的实体对象子类
+        if(this.jPanel instanceof Runnable) {
+            Runnable run = (Runnable)this.jPanel;
+            Thread th = new Thread(run);
+            th.start();
+        }
     }
 
     /*set注入：通过set方法注入配置文件中读取的数据;讲配置文件

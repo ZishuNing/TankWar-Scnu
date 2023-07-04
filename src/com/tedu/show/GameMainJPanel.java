@@ -20,7 +20,7 @@ import com.tedu.manager.GameElement;
  * 
  * @题外话 java开发实现思考的应该是：做继承或者是接口实现
  */
-public class GameMainJPanel extends JPanel{
+public class GameMainJPanel extends JPanel implements Runnable{
 //	联动管理器
 	private ElementManager em;
 	
@@ -36,22 +36,19 @@ public class GameMainJPanel extends JPanel{
 //		讲对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
 		em.addElement(obj,GameElement.PLAY);//直接添加
-		ElementObj obj1=new Play(200,200,50,50,icon);
-		em.addElement(obj1,GameElement.MAPS );
-		ElementObj obj2=new Play(300,300,50,50,icon);
-		em.addElement(obj2,GameElement.BOSS );
 	}
 	public void init() {
 		em = ElementManager.getManager();//得到元素管理器对象
 	}
-	
+
+	//问题：先绘画的会覆盖后绘画的
 	@Override  //用于绘画的    Graphics 画笔 专门用于绘画的
 	public void paint(Graphics g) {
 		super.paint(g);
 		
 		Map<GameElement, List<ElementObj>> all = em.getGameElements();
-		Set<GameElement> set = all.keySet(); //得到所有的key集合
-		for(GameElement ge:set) { //迭代器
+		//Set<GameElement> set = all.keySet(); //得到所有的key集合
+		for(GameElement ge:GameElement.values()) { //迭代器
 			List<ElementObj> list = all.get(ge);
 			for(int i=0;i<list.size();i++) {
 				ElementObj obj=list.get(i);
@@ -60,8 +57,20 @@ public class GameMainJPanel extends JPanel{
 		}
 		
 	}
-	
-	
+
+
+	@Override
+	public void run() {
+		while(true) {
+			this.repaint();
+			//一般情况下，多线程都会使用一个休眠，控制速度
+			try {
+				Thread.sleep(10);//休眠
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
 
 

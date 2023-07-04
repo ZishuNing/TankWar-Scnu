@@ -41,10 +41,9 @@ public class ElementManager {
     //实例化方法
     public void init() {//实例化在这里完成
         gameElements = new HashMap<GameElement, List<ElementObj>>();
-//      将每种元素集合都放入到map中
-		gameElements.put(GameElement.PLAY, new ArrayList<ElementObj>());
-		gameElements.put(GameElement.MAPS, new ArrayList<ElementObj>());
-		gameElements.put(GameElement.ENEMY, new ArrayList<ElementObj>());
-        gameElements.put(GameElement.BOSS, new ArrayList<ElementObj>());
+//      读取枚举创建集合放入gameElements
+		for(GameElement ge:GameElement.values()){
+            gameElements.put(ge,new ArrayList<ElementObj>());
+        }
     }
 }

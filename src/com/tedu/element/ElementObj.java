@@ -46,7 +46,14 @@ public abstract class ElementObj {
      */
     public abstract void showElement(Graphics g);
 
+    /**
+     * 使用父类定义接收键盘事件的方法
+     * 需要实现键盘监听的子类，重写这个方法
+     * bl true为按下，false为松开
+     */
+    public void keyClick(boolean bl, int key) {
 
+    }
     /**
      * 只要是 VO类 POJO 就要为属性生成 get和set方法
      */
