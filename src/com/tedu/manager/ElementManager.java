@@ -12,6 +12,8 @@ import java.util.Map;
  * @author NZS
  */
 public class ElementManager {
+    public static int RefreshTime=5;//刷新时间ms
+
     //GameElement枚举是key，基类ElementObj是value
     private Map<GameElement, List<ElementObj>> gameElements;
     //map的get方法

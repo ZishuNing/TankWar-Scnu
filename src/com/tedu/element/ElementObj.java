@@ -54,6 +54,37 @@ public abstract class ElementObj {
     public void keyClick(boolean bl, int key) {
 
     }
+
+    /**
+     * 更新方法，每一帧都会更新一次，子类不需要重写
+     */
+    public final void update(){
+        updateImg();
+        move();
+        add();
+    }
+
+    /**
+     * 移动方法，需要移动的子类需重写
+     */
+    protected void move(){
+
+    }
+
+    /**
+     * 更新图片方法，需要更新图片的子类需重写
+     */
+    protected void updateImg(){
+
+    }
+
+    /**
+     * 额外方法，需要添加子弹子类需重写，不知道干什么的
+     */
+    protected void add(){
+
+    }
+
     /**
      * 只要是 VO类 POJO 就要为属性生成 get和set方法
      */

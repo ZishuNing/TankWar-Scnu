@@ -26,17 +26,8 @@ public class GameMainJPanel extends JPanel implements Runnable{
 	
 	public GameMainJPanel() {
 		init();
-//		以下代码 后面会换地方重写(测试代码)
-		load();
 	}
-	public void load() {
-//		图片导入
-		ImageIcon icon=new ImageIcon("image/tank/play1/player1_up.png");
-		ElementObj obj=new Play(100,100,50,50,icon);//实例化对象
-//		讲对象放入到 元素管理器中
-//		em.getElementsByKey(GameElement.PLAY).add(obj);
-		em.addElement(obj,GameElement.PLAY);//直接添加
-	}
+
 	public void init() {
 		em = ElementManager.getManager();//得到元素管理器对象
 	}
@@ -65,7 +56,7 @@ public class GameMainJPanel extends JPanel implements Runnable{
 			this.repaint();
 			//一般情况下，多线程都会使用一个休眠，控制速度
 			try {
-				Thread.sleep(10);//休眠
+				Thread.sleep(ElementManager.RefreshTime);//休眠
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

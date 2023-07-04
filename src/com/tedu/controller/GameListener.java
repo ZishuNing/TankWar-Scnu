@@ -12,7 +12,9 @@ import java.util.Set;
 
 public class GameListener implements KeyListener {
     private ElementManager em = ElementManager.getManager();
-    //private Set<Integer> set = new HashSet<Integer>();//集合记录按下的键，重复触发就直接结束
+
+    private boolean Flush = false;
+    private Set<Integer> set = new HashSet<Integer>();//集合记录按下的键，重复触发就直接结束
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -21,11 +23,15 @@ public class GameListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-//        if(set.contains(key)) {
-//            //如果包含，直接结束
-//            return;
-//        }
-//        set.add(key);
+        if(set.contains(key) && !Flush) {
+
+            return;
+        }
+        if(!set.contains(key)) {
+            set.add(key);
+        }else{
+            Flush = false;
+        }
         List<ElementObj> play = em.getElementsByKey(GameElement.PLAY);
         for(ElementObj obj:play) {
             obj.keyClick(true, e.getKeyCode());
@@ -35,10 +41,11 @@ public class GameListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-//        if(set.contains(key)) {
-//            return;
-//        }
-//        set.add(key);
+        if(!set.contains(key)) {
+            return;
+        }
+        Flush = true;
+        set.remove(key);
         List<ElementObj> play = em.getElementsByKey(GameElement.PLAY);
         for(ElementObj obj:play) {
             obj.keyClick(false, e.getKeyCode());
