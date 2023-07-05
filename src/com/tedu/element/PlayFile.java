@@ -2,6 +2,9 @@ package com.tedu.element;
 
 import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
+import com.tedu.manager.ElementManager;
+import com.tedu.manager.GameElement;
+import com.tedu.show.GameJFrame;
 import jdk.nashorn.internal.runtime.Debug;
 
 import javax.swing.*;
@@ -11,6 +14,8 @@ import java.awt.*;
 public class PlayFile extends ElementObj{
     private int attack;
     private int moveNum;
+
+
     Play.Dir dir;//子弹方向
     PlayFile () {}
     //对构造函数封装(普通无图子弹)
@@ -51,7 +56,12 @@ public class PlayFile extends ElementObj{
     }
 
     @Override
-    protected void move() {
+    protected void move(long ... time) {
+        if(this.getX()<=0||this.getX()>= GameJFrame.GameX ||this.getY()<=0||this.getY()>=GameJFrame.GameY){
+            // 出了边界就死了
+            this.setLive(false);
+            return;
+        }
         switch (dir) {
             case UP:
                 this.setY(this.getY()-moveNum);
@@ -68,5 +78,12 @@ public class PlayFile extends ElementObj{
             default:
                 break;
         }
+    }
+
+    @Override
+    public void die(long ... time) {
+        ElementManager em = ElementManager.getManager();
+        ElementObj obj = new PlayFileDie().createPlayFileDie(getX(),getY());
+        em.addElement(obj, GameElement.DIE);
     }
 }

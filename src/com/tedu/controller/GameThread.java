@@ -7,6 +7,7 @@ import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
 import javax.swing.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,15 +48,25 @@ public class GameThread extends Thread {
      */
     private void gameRun() {
         while(true){
+            long gameTime = 0;
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
             for(GameElement ge:GameElement.values()) { //迭代器
                 List<ElementObj> list = all.get(ge);
-                for(int i=0;i<list.size();i++) {
-                    ElementObj obj=list.get(i);
-                    obj.update();//调用每个类的自己的show方法完成自己的显示
+                // 正确的在循环中的删除方法
+                Iterator<ElementObj> it = list.iterator();
+                while(it.hasNext()){
+                    ElementObj obj = it.next();
+                    if(!obj.getLive()){
+                        // 需要调用死亡方法
+                        obj.die(gameTime);
+                        it.remove();
+                        continue;
+                    }
+                    obj.update(gameTime);
                 }
             }
+            gameTime++;// 开游戏到现在经过的帧数
             try {
                 Thread.sleep(ElementManager.RefreshTime);//休眠
             } catch (InterruptedException e) {

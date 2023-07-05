@@ -12,11 +12,17 @@ import javax.swing.ImageIcon;
  */
 public abstract class ElementObj {
 
-    private int x;
-    private int y;
-    private int w;
-    private int h;
-    private ImageIcon icon;
+    // 改成protected，子类可以直接访问
+    protected int x;
+    protected int y;
+    protected int w;
+    protected int h;
+    protected ImageIcon icon;
+
+    private boolean live=true;//是否死亡,可以使用枚举加入多种状态，如死亡，无敌，隐身等等
+
+
+
     /**
      * @说明 无参构造方法
      */
@@ -58,26 +64,34 @@ public abstract class ElementObj {
     /**
      * 更新方法，每一帧都会更新一次，子类不需要重写
      */
-    public final void update(){
-        updateImg();
-        move();
-        add();
+    public final void update(long ... time){
+        // ... 表示可变参数，可以传入0个或多个long类型的参数
+        updateImg(time);
+        move(time);
+        add(time);
     }
 
     /**
      * 移动方法，需要移动的子类需重写
      */
-    protected void move(){}
+    protected void move(long ... time){}
 
     /**
      * 更新图片方法，需要更新图片的子类需重写
      */
-    protected void updateImg(){}
+    protected void updateImg(long ... time){}
 
     /**
      * 额外方法，需要添加子弹子类需重写，不知道干什么的
      */
-    protected void add(){}
+    protected void add(long ... time){}
+
+    /**
+     * 死亡方法，需要死亡的子类需重写
+     * 死亡也是一个对象
+     */
+
+    public void die(long ... time){}
 
     /**
      * 只要是 VO类 POJO 就要为属性生成 get和set方法
@@ -111,6 +125,14 @@ public abstract class ElementObj {
     }
     public void setIcon(ImageIcon icon) {
         this.icon = icon;
+    }
+
+    public boolean getLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
     }
 
 }

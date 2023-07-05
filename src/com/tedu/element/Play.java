@@ -9,7 +9,8 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 public class Play extends ElementObj{
-//    private int dir_x=2,dir_y=2;
+
+//    private boolean shot=false;//是否已经发射
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
     //移动枚举
@@ -30,7 +31,7 @@ public class Play extends ElementObj{
      * 每次刷新都会调用一次
      */
     @Override
-    public void move() {
+    public void move(long ... time) {
         if(!isMoving) return;
         if(dir == Dir.LEFT) {
             this.setX(this.getX()-2);
@@ -58,19 +59,22 @@ public class Play extends ElementObj{
 
 
     @Override
-    public void updateImg() {
+    public void updateImg(long ... time) {
         if(!isMoving) return;
         this.setIcon(GameLoad.playImgMap.get(dir));
     }
     //添加子弹
     @Override
-    protected void add() {
-        if (!pkType) return;//如果不是攻击状态则不添加子弹
+    protected void add(long ... time) {
+        if (!pkType) return;//如果不是攻击状态或射击过了则不添加子弹
         //创建子弹
+        pkType=false;
         ElementObj playFile = new PlayFile().createPlayFile(this, 1, 10);
         //装入集合
         ElementManager.getManager().addElement(playFile, GameElement.PLAYFILE);
     }
+
+
 
     /**
      * 面向对象中第1个思想： 对象自己的事情自己做
@@ -105,7 +109,9 @@ public class Play extends ElementObj{
                     isMoving=true;
                     break;
                 case 32://空格键攻击
+
                     this.pkType=true;//开启攻击状态
+
                     break;
                 default:
                     break;

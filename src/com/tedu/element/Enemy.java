@@ -27,7 +27,7 @@ public class Enemy extends ElementObj{
      * 每次刷新都会调用一次
      */
     @Override
-    public void move() {
+    public void move(long ... time) {
         synchronized (this) {
 //            System.out.println("move");
             if (dir == Dir.LEFT) {
@@ -57,7 +57,7 @@ public class Enemy extends ElementObj{
 
 
     @Override
-    public void updateImg() {
+    public void updateImg(long ... time) {
         frames++;
         if(frames>60){
 
