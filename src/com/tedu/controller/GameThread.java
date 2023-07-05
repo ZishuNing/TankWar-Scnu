@@ -51,21 +51,10 @@ public class GameThread extends Thread {
             long gameTime = 0;
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
-            for(GameElement ge:GameElement.values()) { //迭代器
-                List<ElementObj> list = all.get(ge);
-                // 正确的在循环中的删除方法
-                Iterator<ElementObj> it = list.iterator();
-                while(it.hasNext()){
-                    ElementObj obj = it.next();
-                    if(!obj.getLive()){
-                        // 需要调用死亡方法
-                        obj.die(gameTime);
-                        it.remove();
-                        continue;
-                    }
-                    obj.update(gameTime);
-                }
-            }
+
+            moveAndUpdate(all,gameTime);
+            elementCollide();
+
             gameTime++;// 开游戏到现在经过的帧数
             try {
                 Thread.sleep(ElementManager.RefreshTime);//休眠
@@ -77,7 +66,48 @@ public class GameThread extends Thread {
 
         }
     }
-
+    /**
+     *对游戏中的对象进行碰撞检测
+     */
+    public void elementCollide()
+    {
+        List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+        List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
+        for(ElementObj enemy:enemys)
+        {
+            for(ElementObj playfile:playfiles)
+            {
+               if (enemy.isCollide(playfile))
+               {
+                   enemy.setLive(false);
+                   playfile.setLive(false);
+                   break;
+               }
+            }
+        }
+    }
+    /**
+     *对游戏内某一帧中的元素集合进行遍历生存状态，若不为生存状态则调用死亡方法
+     * @param all 元素管理器中的元素集合
+     * @param gameTime 某一帧
+     */
+    private void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime){
+        for(GameElement ge:GameElement.values()) { //迭代器
+            List<ElementObj> list = all.get(ge);
+            // 正确的在循环中的删除方法
+            Iterator<ElementObj> it = list.iterator();
+            while(it.hasNext()){
+                ElementObj obj = it.next();
+                if(!obj.getLive()){
+                    // 需要调用死亡方法
+                    obj.die(gameTime);
+                    it.remove();
+                    continue;
+                }
+                obj.update(gameTime);
+            }
+        }
+    }
     /**
      * 游戏结束
      */
@@ -93,9 +123,10 @@ public class GameThread extends Thread {
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
         em.addElement(obj, GameElement.PLAY);//直接添加
 
-        // 添加一个敌人，并实现敌人的移动
-        ImageIcon icon1=new ImageIcon("image/tank/play2/player2_up.png");
-        ElementObj obj1=new Enemy(200,200,50,50,icon1);//实例化对象
-        em.addElement(obj1, GameElement.ENEMY);//直接添加
+        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
+            for (int i=0;i<10;i++)
+            {
+                em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
+            }
     }
 }

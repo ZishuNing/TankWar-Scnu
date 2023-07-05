@@ -14,7 +14,7 @@ public class GameLoad {
 
     public static Map<Play.Dir, ImageIcon> playImgMap;
 
-    public static Map<Enemy.Dir, ImageIcon> enemyImgMap;
+
     static {
         playImgMap = new HashMap<>() ;
         playImgMap.put(Play.Dir.UP, new ImageIcon("image/tank/play1/player1_up.png"));
@@ -22,11 +22,6 @@ public class GameLoad {
         playImgMap.put(Play.Dir.LEFT, new ImageIcon("image/tank/play1/player1_left.png"));
         playImgMap.put(Play.Dir.RIGHT, new ImageIcon("image/tank/play1/player1_right.png"));
 
-        enemyImgMap = new HashMap<>() ;
-        enemyImgMap.put(Enemy.Dir.UP, new ImageIcon("image/tank/play2/player2_up.png"));
-        enemyImgMap.put(Enemy.Dir.DOWN, new ImageIcon("image/tank/play2/player2_down.png"));
-        enemyImgMap.put(Enemy.Dir.LEFT, new ImageIcon("image/tank/play2/player2_left.png"));
-        enemyImgMap.put(Enemy.Dir.RIGHT, new ImageIcon("image/tank/play2/player2_right.png"));
     }
 
 

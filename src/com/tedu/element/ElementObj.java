@@ -1,7 +1,7 @@
 package com.tedu.element;
 
 //元素基类
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 
@@ -52,6 +52,32 @@ public abstract class ElementObj {
      */
     public abstract void showElement(Graphics g);
 
+    /**
+     *需要创建元素时，例如创建子弹、敌人时，重写这个方法
+     * @param str 对象数据
+     * @return 返回ElementObj的对象实体
+     */
+    public ElementObj createElement(String str){
+        return null;
+    }
+
+    /**
+     *为对象生成用于碰撞检测的碰撞矩形
+     * @return 返回该对象的碰撞矩形
+     */
+    public Rectangle getRectangle() {
+        return new Rectangle(x,y,w,h);
+    }
+
+    /**
+     *碰撞检测
+     * 将传入的ElementObj对象与调用该方法的对象进行碰撞检测
+     * @param obj 用于碰撞检测的对象
+     * @return true 为已碰撞；false 为未碰撞
+     */
+    public boolean isCollide(ElementObj obj) {
+        return this.getRectangle().intersects(obj.getRectangle());
+    }
     /**
      * 使用父类定义接收键盘事件的方法
      * 需要实现键盘监听的子类，重写这个方法

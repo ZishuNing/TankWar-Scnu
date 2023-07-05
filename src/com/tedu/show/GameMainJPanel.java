@@ -41,8 +41,7 @@ public class GameMainJPanel extends JPanel implements Runnable{
 		//Set<GameElement> set = all.keySet(); //得到所有的key集合
 		for(GameElement ge:GameElement.values()) { //迭代器
 			List<ElementObj> list = all.get(ge);
-			for(int i=0;i<list.size();i++) {
-				ElementObj obj=list.get(i);
+			for (ElementObj obj : list) {
 				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
 			}
 		}
