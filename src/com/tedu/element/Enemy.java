@@ -11,7 +11,7 @@ public class Enemy extends ElementObj{
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(),this.getX(),this.getY(),this.getW(),this.getH(),null);
-        //
+
     }
 
     @Override
