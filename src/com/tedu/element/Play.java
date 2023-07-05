@@ -1,4 +1,5 @@
 package com.tedu.element;
+import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.show.GameJFrame;
 import com.tedu.manager.GameLoad;
@@ -9,27 +10,18 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 public class Play extends ElementObj{
 //    private int dir_x=2,dir_y=2;
-    /**
-     * 移动属性：
-     * 1.单属性 配合 方向枚举类型使用；一次只能移动一个方向
-     * 2.双属性 上写 和 左右 bool， 例如true 代表上，需要另一个变量确定是否按下方向键
-     * 3.4属性，上下左右都可以 bool true代表向上，false不移动，后按的会重置先按的
-     *
-     * 问题 图片什么时候加载到内存，图片放在哪里
-     */
-
+    private boolean pkType=false;//攻击状态 true则攻击
+    //移动枚举
     public enum Dir{
         UP,DOWN,LEFT,RIGHT,STOP
     }
-    Dir dir;
-
+    public Dir dir;
 
     public Play(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
 
         dir = Dir.STOP;
         this.setIcon(icon);
-
     }
 
     /**
@@ -68,6 +60,15 @@ public class Play extends ElementObj{
         if(dir == Dir.STOP) return;
         this.setIcon(GameLoad.playImgMap.get(dir));
     }
+    //添加子弹
+    @Override
+    protected void add() {
+        if (!pkType) return;//如果不是攻击状态则不添加子弹
+        //创建子弹
+        ElementObj playFile = new PlayFile().createPlayFile(this, 1, 10);
+        //装入集合
+        ElementManager.getManager().addElement(playFile, GameElement.PLAYFILE);
+    }
 
     /**
      * 面向对象中第1个思想： 对象自己的事情自己做
@@ -96,6 +97,9 @@ public class Play extends ElementObj{
                 case 40:
                     dir = Dir.DOWN;
                     break;
+                case 32://空格键攻击
+                    this.pkType=true;//开启攻击状态
+                    break;
                 default:
                     break;
             }
@@ -105,14 +109,14 @@ public class Play extends ElementObj{
                 case 38:
                 case 39:
                 case 40:
-
                     dir = Dir.STOP;
+                    break;
+                case 32://空格键攻击
+                    this.pkType=false;//关闭攻击状态
                     break;
                 default:
                     break;
             }
         }
-
-
     }
 }

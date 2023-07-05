@@ -6,7 +6,7 @@ public enum GameElement {
      * MAPS 地图
      * ENEMY 敌人
      * BOSS  boss
-     * 子弹。。。。。。
+     * PLAYFILE 子弹??好奇怪的命名
      */
-    MAPS,PLAY,ENEMY,BOSS
+    MAPS,PLAY,ENEMY,BOSS,PLAYFILE;
 }
