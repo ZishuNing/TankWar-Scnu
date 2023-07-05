@@ -11,16 +11,17 @@ import javax.swing.ImageIcon;
 public class Play extends ElementObj{
 //    private int dir_x=2,dir_y=2;
     private boolean pkType=false;//攻击状态 true则攻击
+    private boolean isMoving=false;
     //移动枚举
     public enum Dir{
-        UP,DOWN,LEFT,RIGHT,STOP
+        UP,DOWN,LEFT,RIGHT
     }
     public Dir dir;
 
     public Play(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
 
-        dir = Dir.STOP;
+        dir = Dir.UP;
         this.setIcon(icon);
     }
 
@@ -30,6 +31,7 @@ public class Play extends ElementObj{
      */
     @Override
     public void move() {
+        if(!isMoving) return;
         if(dir == Dir.LEFT) {
             this.setX(this.getX()-2);
             if(this.getX()<=0) this.setX(0);
@@ -57,7 +59,7 @@ public class Play extends ElementObj{
 
     @Override
     public void updateImg() {
-        if(dir == Dir.STOP) return;
+        if(!isMoving) return;
         this.setIcon(GameLoad.playImgMap.get(dir));
     }
     //添加子弹
@@ -84,18 +86,23 @@ public class Play extends ElementObj{
     //重写键盘输入
     public void keyClick(boolean bl, int key) {
         if (bl) {
+
             switch (key) {
                 case 37:
                     dir = Dir.LEFT;
+                    isMoving=true;
                     break;
                 case 38:
                     dir = Dir.UP;
+                    isMoving=true;
                     break;
                 case 39:
                     dir = Dir.RIGHT;
+                    isMoving=true;
                     break;
                 case 40:
                     dir = Dir.DOWN;
+                    isMoving=true;
                     break;
                 case 32://空格键攻击
                     this.pkType=true;//开启攻击状态
@@ -109,7 +116,7 @@ public class Play extends ElementObj{
                 case 38:
                 case 39:
                 case 40:
-                    dir = Dir.STOP;
+                    isMoving=false;
                     break;
                 case 32://空格键攻击
                     this.pkType=false;//关闭攻击状态
