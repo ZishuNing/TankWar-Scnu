@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 public class Play extends ElementObj{
-
+    public static int mainPlayId=0;
 //    private boolean shot=false;//是否已经发射
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
@@ -149,5 +149,11 @@ public class Play extends ElementObj{
                     break;
             }
         }
+    }
+
+    // 重写toString
+
+    public String ToString() {
+    	return ""+this.getId()+"," +this.getX()+","+this.getY()+","+this.getLive()+","+this.isMoving+","+this.pkType+","+this.hp+","+this.dir+";";
     }
 }

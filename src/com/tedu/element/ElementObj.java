@@ -24,6 +24,10 @@ public abstract class ElementObj implements Serializable {
 
     protected GameElement obj_type;//元素类型
 
+    protected int id;// obj id
+
+
+
     private boolean live=true;//是否死亡,可以使用枚举加入多种状态，如死亡，无敌，隐身等等
 
 
@@ -180,6 +184,19 @@ public abstract class ElementObj implements Serializable {
 
     public void setObj_type(GameElement obj_type) {
         this.obj_type = obj_type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
 

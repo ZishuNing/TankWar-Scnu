@@ -17,6 +17,8 @@ public class GameJFrame extends JFrame {
     private MouseMotionListener mouseMotionListener=null; //鼠标监听
     private MouseListener mouseListener=null;
     private Thread thead=null;  //游戏主线程
+    private Thread webThread=null; //服务器线程
+
     public GameJFrame() {
         init();
     }
@@ -37,6 +39,9 @@ public class GameJFrame extends JFrame {
         }
         if(thead !=null) {
             thead.start();//启动线程
+        }
+        if(webThread !=null) {
+            webThread.start();//启动线程
         }
 //		界面的刷新
         this.setVisible(true);//显示界面
@@ -68,4 +73,9 @@ public class GameJFrame extends JFrame {
     public void setThead(Thread thead) {
         this.thead = thead;
     }
+
+    public void setWeb(Thread server) {
+        this.webThread = server;
+    }
+
 }

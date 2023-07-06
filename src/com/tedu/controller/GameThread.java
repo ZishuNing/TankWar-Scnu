@@ -22,6 +22,13 @@ public class GameThread extends Thread {
 
     private ElementManager em=ElementManager.getManager();
 
+    private boolean isServer;
+    private boolean isMultiplayer;
+
+    public GameThread(boolean isServer, boolean isMultiplayer) {
+        this.isServer = isServer;
+        this.isMultiplayer = isMultiplayer;
+    }
 
     @Override
     public void run() {// 游戏的run方法，主线程
@@ -48,7 +55,13 @@ public class GameThread extends Thread {
     private void gameLoad() throws IOException, ClassNotFoundException {
 
         GameLoad.Init();
-        loadPlay();
+
+        if(isMultiplayer && isServer){
+            loadMultiple();
+        }else{
+            loadPlay();
+        }
+
     }
     /**
      * 游戏进行
@@ -138,6 +151,17 @@ public class GameThread extends Thread {
      */
     private void gameOver(){
 
+    }
+
+    /**
+     * 多人游戏加载
+     */
+    private void loadMultiple(){
+        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        // 作为服务器端，或第一个进入游戏的玩家设置的id
+        obj.setId(1);
+
+        em.addElement(obj, GameElement.PLAY);//直接添加
     }
 
     public void loadPlay() {
