@@ -63,11 +63,15 @@ public class GameThread extends Thread {
             List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
             List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+            List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
 
             moveAndUpdate(all,gameTime);
             //碰撞检测
             ElementPK(enemys,playfiles);
             ElementPK(playfiles,maps);
+            ElementPK(plays, maps);
+            ElementPK(plays, playfiles);
+            ElementPK(plays, enemys);
 
 
 
@@ -96,8 +100,8 @@ public class GameThread extends Thread {
             {
                 if (objA.isCollide(objB))
                 {
-                    objA.setLive(false);
-                    objB.setLive(false);
+                    objA.collide(objB.getObj_type());
+                    objB.collide(objA.getObj_type());
                     break;
                 }
             }
@@ -157,7 +161,7 @@ public class GameThread extends Thread {
     public void loadPlay() {
 //		图片导入
 
-        ElementObj obj=new Play(100,100,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
 //		讲对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
         em.addElement(obj, GameElement.PLAY);//直接添加

@@ -1,5 +1,6 @@
 package com.tedu.element;
 
+import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 import com.tedu.show.GameJFrame;
 
@@ -11,8 +12,13 @@ public class PlayFileDie extends ElementObj{
 
     PlayFileDie () {}
 
-    public  ElementObj createPlayFileDie(int X,int Y){
+    @Override
+    public void collide(GameElement type) {
+        // play碰撞之后在这里获取金币
+    }
 
+    public  ElementObj createPlayFileDie(int X, int Y){
+        this.obj_type = GameElement.DIE;
         this.setX(X);
         this.setY(Y);
         this.setIcon(GameLoad.ImgMap.get(GameLoad.GameLoadEnum.BOOM));

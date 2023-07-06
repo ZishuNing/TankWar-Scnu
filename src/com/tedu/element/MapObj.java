@@ -1,5 +1,6 @@
 package com.tedu.element;
 
+import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
@@ -13,6 +14,20 @@ public class MapObj extends ElementObj{
     private int hp;
 
     @Override
+    public void collide(GameElement type) {
+        switch (type){
+            case ENEMY:
+            case PLAY:
+            case BOSS:
+                break;
+            case PLAYFILE:
+                hp--;
+                if(hp<=0) this.setLive(false);
+                break;
+        }
+    }
+
+    @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(), this.getX(), this.getY(), this.getW(), this.getH(), null);
     }
@@ -20,6 +35,7 @@ public class MapObj extends ElementObj{
     public ElementObj createElement(String str) {
         String[] arr = str.split(",");
         ImageIcon icon = null;
+        this.obj_type= GameElement.MAPS;
         switch (arr[0]) {
             // 设置图片信息，图片还未加载到内存中
             case "GRASS":

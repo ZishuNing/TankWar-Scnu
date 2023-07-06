@@ -24,6 +24,7 @@ public class PlayFile extends ElementObj{
         this.dir = play.dir;
         this.attack=attack;
         this.moveNum=moveNum;
+        this.obj_type = GameElement.PLAYFILE;
         this.setW(10);
         this.setH(10);
         switch (dir) {
@@ -50,6 +51,24 @@ public class PlayFile extends ElementObj{
         }
         return this;
     }
+
+    @Override
+    public void collide(GameElement type) {
+        switch (type) {
+            case MAPS:
+            case ENEMY:
+            case PLAY:
+            case BOSS:
+
+                this.setLive(false);
+                break;
+            case PLAYFILE:
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void showElement(Graphics g) {
         g.setColor(Color.red);

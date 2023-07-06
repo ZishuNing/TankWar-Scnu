@@ -1,6 +1,8 @@
 package com.tedu.element;
 
 //元素基类
+import com.tedu.manager.GameElement;
+
 import java.awt.*;
 
 import javax.swing.ImageIcon;
@@ -18,6 +20,8 @@ public abstract class ElementObj {
     protected int w;
     protected int h;
     protected ImageIcon icon;
+
+    protected GameElement obj_type;//元素类型
 
     private boolean live=true;//是否死亡,可以使用枚举加入多种状态，如死亡，无敌，隐身等等
 
@@ -67,6 +71,14 @@ public abstract class ElementObj {
      */
     public Rectangle getRectangle() {
         return new Rectangle(x,y,w,h);
+    }
+
+
+    /**
+     * collide 碰撞后会调用这个函数，表明碰撞的对象类型
+     */
+    public void collide(GameElement type) {
+
     }
 
     /**
@@ -161,6 +173,13 @@ public abstract class ElementObj {
         this.live = live;
     }
 
+    public GameElement getObj_type() {
+        return obj_type;
+    }
+
+    public void setObj_type(GameElement obj_type) {
+        this.obj_type = obj_type;
+    }
 }
 
 

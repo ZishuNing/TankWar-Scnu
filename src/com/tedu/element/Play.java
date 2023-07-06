@@ -14,14 +14,34 @@ public class Play extends ElementObj{
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
 
+    private int hp=100;//血量
     // 重构枚举
     public GameLoad.GameLoadEnum dir;
 
     public Play(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
-
+        this.obj_type = GameElement.PLAY;
         dir = GameLoad.GameLoadEnum.play1_up;
         this.setIcon(icon);
+    }
+
+    @Override
+    public void collide(GameElement type) {
+        switch (type){
+            case MAPS:
+            case ENEMY:
+            case PLAY:
+            case BOSS:
+                this.isMoving = false;
+                break;
+            case PLAYFILE:
+                hp--;
+                if(hp<=0) this.setLive(false);
+                break;
+
+        }
+
+
     }
 
     /**
