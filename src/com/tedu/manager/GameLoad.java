@@ -17,15 +17,16 @@ import java.util.*;
 public class GameLoad {
     private static ElementManager em = ElementManager.getManager();
 
-    public static void Init() throws IOException {
-
-        Load();
-        MapLoad(5);
+    public static void Init(int Id) throws IOException {
+        Load();//读取文件
+        PlayLoad(Id);
+        MapLoad(Id);
+        EnemyLoad(Id);
     }
 
     // 需要加图片就在这里添加，然后在 com/tedu/text/GameData.properties 中加入对应的内容
     public enum GameLoadEnum{
-        play1_up,play1_down,play1_left,play1_right,GRASS, BRICK, RIVER, IRON, BOOM, play2_up, play2_down, play2_left, play2_right,
+        play1_up,play1_down,play1_left,play1_right,GRASS, BRICK, RIVER, IRON, BOOM, play2_up, play2_down, play2_left, play2_right,enemy_up,enemy_down,enemy_left,enemy_right
     }
 
     // 重构全局枚举类，用于存储图片
@@ -41,21 +42,22 @@ public class GameLoad {
         // 使用IO流来获取文件对象
         ClassLoader classLoader = GameLoad.class.getClassLoader();
         InputStream maps = classLoader.getResourceAsStream(mapName);
+        pro.clear();
         if (maps == null) {
-            System.out.println("配置文件读取异常，请重新安装");
+            System.out.println("地图配置文件读取异常，请重新安装");
             return;
         }
 
         try {
-            pro.load(maps);
+            pro.load(maps);//地图配置文件内容装载进properties中
             Enumeration<?> names = pro.propertyNames();
             //无序获取
             while (names.hasMoreElements()){
-                String key = (String) names.nextElement();
-                String value = pro.getProperty(key);
-                String[] split = value.split(";");
-                for (int i=0;i<split.length;i++){
-                    ElementObj element =new MapObj().createElement(key+","+split[i]);
+                String key = (String) names.nextElement();//键
+                String value = pro.getProperty(key);//值，为‘400；200；300’形式的字符串
+                String[] split = value.split(";");//将上述字符串分解成’400‘、‘200’、‘300’的值
+                for (int i=0;i<split.length;i++){//
+                    ElementObj element =new MapObj().createElement(key+","+split[i]);//传入字符串创建对象并加进管理器中
                     em.addElement(element,GameElement.MAPS);
                 }
             }
@@ -65,9 +67,57 @@ public class GameLoad {
         }
     }
 
+    public static void PlayLoad(int playId){
+        String playName =  "com/tedu/text/" + playId + ".play";
+        ClassLoader classLoader = GameLoad.class.getClassLoader();
+        InputStream play = classLoader.getResourceAsStream(playName);
+        pro.clear();
+        if(play==null) {
+            System.out.println("玩家配置文件读取异常，请重新安装");
+            return;
+        }
+
+        try {
+            pro.load(play);
+            Enumeration<?> names = pro.propertyNames();
+            while (names.hasMoreElements()){
+                String key = (String) names.nextElement();
+                String value = pro.getProperty(key);
+                ElementObj element = new Play().createElement(value);
+                em.addElement(element,GameElement.PLAY);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void EnemyLoad(int enemyId) {
+        String enemyName = "com/tedu/text/"+enemyId+".enemy";
+        ClassLoader classLoader = GameLoad.class.getClassLoader();
+        InputStream enemy = classLoader.getResourceAsStream(enemyName);
+        pro.clear();
+        if(enemy==null) {
+            System.out.println("敌人配置文件读取异常，请重新安装");
+            return;
+        }
+
+        try {
+            pro.load(enemy);
+            Enumeration<?> names = pro.propertyNames();
+            while (names.hasMoreElements()){
+                String key = (String) names.nextElement();
+                String value = pro.getProperty(key);
+                ElementObj element = new Enemy().createElement(value);
+                em.addElement(element,GameElement.ENEMY);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void Load() throws IOException {
 
-
+        //以字节流的方式获取配置配置文件中的内容并存入图片集ImgMap中
         try{
             Properties prop = new Properties();
             ClassLoader classLoader = GameLoad.class.getClassLoader();
@@ -77,11 +127,12 @@ public class GameLoad {
                 System.out.println(key + ":" + prop.getProperty(key));
                 ImgMap.put(GameLoadEnum.valueOf(key), new ImageIcon(prop.getProperty(key)));
             }
+            prop.clear();
             assert in != null;
             in.close();
         }
         catch(Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

@@ -30,24 +30,8 @@ public class ElementManager implements Serializable {
         EM.gameElements = game_elements;
     }
 
-    public static byte[] Serialize() throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(getManager().getGameElements());
-        return baos.toByteArray();
 
-
-    }
-
-    public static void DeSerialize(byte[] serial_data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(serial_data);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        getManager().gameElements = (Map<GameElement, List<ElementObj>>) ois.readObject();
-
-    }
-
-
-    //map的get方法
+        //map的get方法
     public Map<GameElement, List<ElementObj>> getGameElements(){
         return gameElements;
     }
@@ -59,20 +43,13 @@ public class ElementManager implements Serializable {
     public List<ElementObj> getElementsByKey(GameElement ge){
         return gameElements.get(ge);
     }
-
+    //单例
 
     //synchronized保证只有一个线程实例化
     public static synchronized ElementManager getManager() {
         if(EM == null) {//控制锁定
             EM = new ElementManager();
         }
-
-//        else if(EM == null && GameStart.isMultiplayer && !GameStart.isServer){
-//            while(EM == null){ // 直到EM不为空才醒来（等到client完成连接）
-//               yield();
-//            }
-//
-//        }
         return EM;
     }
     private ElementManager() {
@@ -85,9 +62,6 @@ public class ElementManager implements Serializable {
 		for(GameElement ge:GameElement.values()){
             gameElements.put(ge,new ArrayList<ElementObj>());
         }
-
-
-
     }
 
     public synchronized void updatePlayElement(Play play) {

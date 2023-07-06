@@ -23,7 +23,7 @@ import java.util.Map;
 public class GameThread extends Thread {
 
     private ElementManager em=ElementManager.getManager();//得到元素管理器对象
-
+    private int Id;
 
 
     @Override
@@ -50,15 +50,23 @@ public class GameThread extends Thread {
      */
     private void gameLoad() throws IOException, ClassNotFoundException {
 
-        GameLoad.Init();
 
         if(GameStart.isMultiplayer && GameStart.isServer){
+            // 这里只用加载地图，玩家和敌人的加载独立出来
+            GameLoad.Load();
+            GameLoad.MapLoad(Id);
+
             loadMultiple();
+
+
         }else if(GameStart.isMultiplayer && !GameStart.isServer){
+            // 这里只用加载内容
+            GameLoad.Load();
             loadMultipleClient();
         }else{
-            loadPlay();
+            GameLoad.Init(Id);
         }
+
 
     }
 
@@ -71,25 +79,25 @@ public class GameThread extends Thread {
      * 3.暂停
      */
     private void gameRun() {
+        long gameTime = 0;
         while(true){
-            long gameTime = 0;
+
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
             List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
-            List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+            List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
-
+            //每一帧对集合中所有的对象进行移动和图片的更新
             moveAndUpdate(all,gameTime);
-            //碰撞检测
-            ElementPK(enemys,playfiles);
+            //每一帧对对象进行碰撞检测
+            ElementPK(enemies,maps);
+            ElementPK(enemies,playfiles);
             ElementPK(playfiles,maps);
             ElementPK(plays, maps);
             ElementPK(plays, playfiles);
-            ElementPK(plays, enemys);
-
-
+            ElementPK(plays, enemies);
 
             gameTime++;// 开游戏到现在经过的帧数
             try {
@@ -106,18 +114,18 @@ public class GameThread extends Thread {
     /**
      * pk 函数
      * @param listA
-     * @param listb
+     * @param listB
      */
-    public void ElementPK(List<ElementObj> listA, List<ElementObj> listb)
+    public void ElementPK(List<ElementObj> listA, List<ElementObj> listB)
     {
-        for(ElementObj objA:listA)
+        for(int i=0;i<listA.size();i++)
         {
-            for(ElementObj objB:listb)
+            for(int j=0;j< listB.size();j++)
             {
-                if (objA.isCollide(objB))
+                if (listA.get(i).isCollide(listB.get(j)))
                 {
-                    objA.collide(objB.getObj_type());
-                    objB.collide(objA.getObj_type());
+                    listA.get(i).collide(listB.get(j).getObj_type());
+                    listB.get(j).collide(listA.get(i).getObj_type());
                     break;
                 }
             }
@@ -143,7 +151,7 @@ public class GameThread extends Thread {
                     it.remove();
                     continue;
                 }
-                obj.update(gameTime);
+                obj.update(gameTime); //调用所有基类中射出子弹和移动的方法
             }
         }
     }
@@ -182,7 +190,7 @@ public class GameThread extends Thread {
      * 多人游戏加载
      */
     private void loadMultiple(){
-        ElementObj obj=new Play(0,0,35,35,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        ElementObj obj=new Play(0,0,30,30,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
         // 作为服务器端，或第一个进入游戏的玩家设置的id
         obj.setId(0);
         Play.setMainPlayId(0);
@@ -190,18 +198,20 @@ public class GameThread extends Thread {
         em.addElement(obj, GameElement.PLAY);//直接添加
     }
 
-    public void loadPlay() {
-//		图片导入
-
-        ElementObj obj=new Play(0,0,35,35,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
-//		讲对象放入到 元素管理器中
-//		em.getElementsByKey(GameElement.PLAY).add(obj);
-        em.addElement(obj, GameElement.PLAY);//直接添加
-
-        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
-            for (int i=0;i<10;i++)
-            {
-                em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
-            }
+//    public void loadPlay() {
+////		图片导入
+//
+//        ElementObj obj = new Play(0, 0, 35, 35, GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+////		讲对象放入到 元素管理器中
+////		em.getElementsByKey(GameElement.PLAY).add(obj);
+//        em.addElement(obj, GameElement.PLAY);//直接添加
+//
+//        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
+//        for (int i = 0; i < 10; i++) {
+//            em.addElement(new Enemy().createElement(""), GameElement.ENEMY);
+//        }
+//    }
+    public void setId(int Id) {
+        this.Id = Id;
     }
 }

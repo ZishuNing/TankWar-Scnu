@@ -1,15 +1,13 @@
 package com.tedu.show;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.tedu.element.ElementObj;
-import com.tedu.element.Play;
+import com.tedu.element.Enemy;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
@@ -23,7 +21,8 @@ import com.tedu.manager.GameElement;
 public class GameMainJPanel extends JPanel implements Runnable{
 //	联动管理器
 	private ElementManager em;
-	
+	private boolean firstTime = true; //是否为第一次遍历，注意由于线程的缘故，可能第一次遍历敌人的list后出来的初始敌人数量仍为0
+	private int enemyNum = 0;//初始敌人数量
 	public GameMainJPanel() {
 		init();
 	}
@@ -34,18 +33,21 @@ public class GameMainJPanel extends JPanel implements Runnable{
 
 	//问题：先绘画的会覆盖后绘画的
 	@Override  //用于绘画的    Graphics 画笔 专门用于绘画的
-	public void paint(Graphics g) {
+	public void  paint(Graphics g) {
 		super.paint(g);
 		
 		Map<GameElement, List<ElementObj>> all = em.getGameElements();
 		//Set<GameElement> set = all.keySet(); //得到所有的key集合
 		for(GameElement ge:GameElement.values()) { //迭代器
 			List<ElementObj> list = all.get(ge);
-			for (ElementObj obj : list) {
-				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
+			for (int i=0;i<list.size();i++) {
+				list.get(i).showElement(g);//调用每个类的自己的show方法完成自己的显示
 			}
 		}
-		
+		// 显示当前得分
+		Font font = new Font("宋体",Font.PLAIN,16);
+		g.setFont(font);
+		g.drawString("当前得分："+ getScore(),650,50);
 	}
 
 
@@ -61,6 +63,32 @@ public class GameMainJPanel extends JPanel implements Runnable{
 			}
 		}
 	}
+
+	private   int getScore()
+	{
+		int score = 0;
+		if (firstTime||enemyNum==0)
+		{
+			firstTime =false;
+			java.util.List<ElementObj> elementObjs = em.getElementsByKey(GameElement.ENEMY);
+			for (int i=0;i<elementObjs.size();i++)
+			{
+				enemyNum++;
+			}
+		}
+		else
+		{
+			int liveEnemy = 0;
+			List<ElementObj> elementObjs = em.getElementsByKey(GameElement.ENEMY);
+			for (int i=0;i<elementObjs.size();i++)
+			{
+				liveEnemy++;
+			}
+			score = enemyNum-liveEnemy;
+		}
+		return score;
+	}
+
 }
 
 

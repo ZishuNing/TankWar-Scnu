@@ -100,7 +100,7 @@ public class Task implements Runnable {
             gameClient.addPeer(new Peer(packet.getAddress(), packet.getPort()));
 
             int id = recedata.peers.size() +1 ;
-            ElementObj elementObj = new Play(0,0,35,35, GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));
+            ElementObj elementObj = new Play(0,0,30,30, GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));
             elementObj.setId(id);
 
             ElementManager.getManager().addElement(elementObj, GameElement.PLAY);

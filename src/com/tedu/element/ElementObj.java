@@ -2,6 +2,7 @@ package com.tedu.element;
 
 //元素基类
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public abstract class ElementObj implements Serializable {
     protected int h;
     protected ImageIcon icon;
 
+    protected int hp;
+
     protected GameElement obj_type;//元素类型
 
     protected int id;// obj id
@@ -30,7 +33,7 @@ public abstract class ElementObj implements Serializable {
 
     private boolean live=true;//是否死亡,可以使用枚举加入多种状态，如死亡，无敌，隐身等等
 
-
+    protected GameLoad.GameLoadEnum dir;
 
     /**
      * @说明 无参构造方法
@@ -117,7 +120,7 @@ public abstract class ElementObj implements Serializable {
     /**
      * 移动方法，需要移动的子类需重写
      */
-    protected void move(long ... time){}
+    public void move(long... time){}
 
     /**
      * 更新图片方法，需要更新图片的子类需重写
@@ -178,6 +181,10 @@ public abstract class ElementObj implements Serializable {
         this.live = live;
     }
 
+    public int getHp(){return hp;}
+
+    public void setHp(int hp){this.hp = hp;}
+
     public GameElement getObj_type() {
         return obj_type;
     }
@@ -198,6 +205,8 @@ public abstract class ElementObj implements Serializable {
     public String toString() {
         return super.toString();
     }
+
+    public GameLoad.GameLoadEnum getDir() {return dir;}
 }
 
 

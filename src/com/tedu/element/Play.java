@@ -19,8 +19,14 @@ public class Play extends ElementObj implements Serializable {
 
     private static int bias=GameLoad.GameLoadEnum.play2_up.ordinal()-GameLoad.GameLoadEnum.play1_up.ordinal(); // 两个枚举的偏移量
     private int hp=100;//血量
+    private int safeValue = 30;//防穿模值
+    ;//血量
     // 重构枚举
     public GameLoad.GameLoadEnum dir;
+
+    public Play(){
+
+    }
 
     public Play(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
@@ -30,24 +36,6 @@ public class Play extends ElementObj implements Serializable {
     }
 
 
-    @Override
-    public void collide(GameElement type) {
-        switch (type){
-            case MAPS:
-            case ENEMY:
-            case PLAY:
-            case BOSS:
-                this.isMoving = false;
-                break;
-            case PLAYFILE:
-                hp--;
-                if(hp<=0) this.setLive(false);
-                break;
-
-        }
-
-
-    }
 
     /**
      * 重写移动方法
@@ -59,24 +47,23 @@ public class Play extends ElementObj implements Serializable {
         if(dir == GameLoad.GameLoadEnum.play1_left || dir == GameLoad.GameLoadEnum.play2_left) {
             this.setX(this.getX()-2);
             if(this.getX()<=0) this.setX(0);
-            else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
+            else if(this.getX()>= GameJFrame.GameX-getW()-safeValue) this.setX(GameJFrame.GameX-getW()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_right || dir == GameLoad.GameLoadEnum.play2_right) {
             this.setX(this.getX()+2);
             if(this.getX()<=0) this.setX(0);
-            else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
+            else if(this.getX()>= GameJFrame.GameX-getW()-safeValue) this.setX(GameJFrame.GameX-getW()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_up || dir == GameLoad.GameLoadEnum.play2_up) {
             this.setY(this.getY()-2);
             if(this.getY()<=0) this.setY(0);
-            else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
+            else if(this.getY()>= GameJFrame.GameY-getH()-safeValue) this.setY(GameJFrame.GameY-getH()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_down || dir == GameLoad.GameLoadEnum.play2_down) {
             this.setY(this.getY()+2);
             if(this.getY()<=0) this.setY(0);
-            else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
+            else if(this.getY()>= GameJFrame.GameY-getH()-safeValue) this.setY(GameJFrame.GameY-getH()-safeValue);
         }
-
     }
 
 
@@ -98,7 +85,24 @@ public class Play extends ElementObj implements Serializable {
         ElementManager.getManager().addElement(playFile, GameElement.PLAYFILE);
     }
 
-
+    @Override
+    public void collide(GameElement type) {
+        switch (type)
+        {
+            case PLAYFILE:
+                setHp(this.getHp()-1);
+                if (getHp()<=0)
+                {
+                    this.setLive(false);
+                }
+                break;
+            case BOSS:
+            case ENEMY:
+            case MAPS:
+                isMoving = false;
+                break;
+        }
+    }
 
     /**
      * 面向对象中第1个思想： 对象自己的事情自己做
@@ -112,6 +116,7 @@ public class Play extends ElementObj implements Serializable {
                 this.getW(), this.getH(), null);
     }
     //重写键盘输入
+    @Override
     public void keyClick(boolean bl, int key) {
         if (bl) {
 
@@ -240,7 +245,7 @@ public class Play extends ElementObj implements Serializable {
 
         GameLoad.GameLoadEnum dir = GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])+bias];
 
-        Play play = new Play(Integer.parseInt(args[1]), Integer.parseInt(args[2]), 35, 35, GameLoad.ImgMap.get(dir));
+        Play play = new Play(Integer.parseInt(args[1]), Integer.parseInt(args[2]), 30, 30, GameLoad.ImgMap.get(dir));
         play.setId(Integer.parseInt(args[0]));
         play.setLive(Boolean.parseBoolean(args[3]));
         play.setMoving(Boolean.parseBoolean(args[4]));
@@ -251,6 +256,21 @@ public class Play extends ElementObj implements Serializable {
         play.setDir(dir);
         return play;
 
+    }
+
+
+    @Override
+    public ElementObj createElement(String str) {
+        String[] arr = str.split(";");
+        this.setObj_type(GameElement.PLAY);
+        this.dir = GameLoad.GameLoadEnum.play1_up;
+        this.setX(Integer.parseInt(arr[0]));
+        this.setY(Integer.parseInt(arr[1]));
+        this.setW(Integer.parseInt(arr[2]));
+        this.setH(Integer.parseInt(arr[3]));
+        this.setHp(Integer.parseInt(arr[4]));
+        this.setIcon(GameLoad.ImgMap.get(dir));
+        return this;
     }
 
 }
