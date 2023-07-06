@@ -5,6 +5,7 @@ import com.tedu.element.Enemy;
 import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ public class GameThread extends Thread {
      * 游戏加载
      */
     private void gameLoad() {
+        GameLoad.MapLoad(5);
         loadPlay();
     }
     /**
