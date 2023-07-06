@@ -2,6 +2,9 @@ package com.tedu.manager;
 
 import com.tedu.element.ElementObj;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +14,31 @@ import java.util.Map;
  * 单例元素管理器
  * @author NZS
  */
-public class ElementManager {
+public class ElementManager implements Serializable {
     public static int RefreshTime=5;//刷新时间ms
 
     //GameElement枚举是key，基类ElementObj是value
-    private Map<GameElement, List<ElementObj>> gameElements;
+    private static Map<GameElement, List<ElementObj>> gameElements;
+
+
+
+    public static void Serialize() throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get("src\\com\\tedu\\manager\\ElementManager.ser")));
+        oos.writeObject(gameElements);
+        oos.close();
+    }
+
+    public static void DeSerialize() throws IOException, ClassNotFoundException {
+        FileInputStream fileIn = new FileInputStream("src\\com\\tedu\\manager\\ElementManager.ser");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        gameElements = (Map<GameElement, List<ElementObj>>) in.readObject();
+        in.close();
+        fileIn.close();
+        System.out.println("Deserialized data:");
+
+    }
+
+
     //map的get方法
     public Map<GameElement, List<ElementObj>> getGameElements(){
         return gameElements;
@@ -47,5 +70,8 @@ public class ElementManager {
 		for(GameElement ge:GameElement.values()){
             gameElements.put(ge,new ArrayList<ElementObj>());
         }
+
+
+
     }
 }

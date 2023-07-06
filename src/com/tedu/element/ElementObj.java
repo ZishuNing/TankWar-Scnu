@@ -4,6 +4,7 @@ package com.tedu.element;
 import com.tedu.manager.GameElement;
 
 import java.awt.*;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
@@ -12,7 +13,7 @@ import javax.swing.ImageIcon;
  * @author ZRH
  *
  */
-public abstract class ElementObj {
+public abstract class ElementObj implements Serializable {
 
     // 改成protected，子类可以直接访问
     protected int x;

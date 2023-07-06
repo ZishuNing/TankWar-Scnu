@@ -31,6 +31,8 @@ public class GameThread extends Thread {
             gameLoad();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         // 游戏进行时
         gameRun();
@@ -43,7 +45,7 @@ public class GameThread extends Thread {
     /**
      * 游戏加载
      */
-    private void gameLoad() throws IOException {
+    private void gameLoad() throws IOException, ClassNotFoundException {
 
         GameLoad.Init();
         loadPlay();
@@ -109,26 +111,6 @@ public class GameThread extends Thread {
     }
 
 
-    /**
-     *对游戏中的对象进行碰撞检测
-     */
-//    public void elementCollide()
-//    {
-//        List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
-//        List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
-//        for(ElementObj enemy:enemys)
-//        {
-//            for(ElementObj playfile:playfiles)
-//            {
-//               if (enemy.isCollide(playfile))
-//               {
-//                   enemy.setLive(false);
-//                   playfile.setLive(false);
-//                   break;
-//               }
-//            }
-//        }
-//    }
     /**
      *对游戏内某一帧中的元素集合进行遍历生存状态，若不为生存状态则调用死亡方法
      * @param all 元素管理器中的元素集合
