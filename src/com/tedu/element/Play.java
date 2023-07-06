@@ -13,16 +13,14 @@ public class Play extends ElementObj{
 //    private boolean shot=false;//是否已经发射
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
-    //移动枚举
-    public enum Dir{
-        UP,DOWN,LEFT,RIGHT
-    }
-    public Dir dir;
+
+    // 重构枚举
+    public GameLoad.GameLoadEnum dir;
 
     public Play(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
 
-        dir = Dir.UP;
+        dir = GameLoad.GameLoadEnum.play1_up;
         this.setIcon(icon);
     }
 
@@ -33,22 +31,22 @@ public class Play extends ElementObj{
     @Override
     public void move(long ... time) {
         if(!isMoving) return;
-        if(dir == Dir.LEFT) {
+        if(dir == GameLoad.GameLoadEnum.play1_left) {
             this.setX(this.getX()-2);
             if(this.getX()<=0) this.setX(0);
             else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
         }
-        if(dir == Dir.RIGHT) {
+        if(dir == GameLoad.GameLoadEnum.play1_right) {
             this.setX(this.getX()+2);
             if(this.getX()<=0) this.setX(0);
             else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
         }
-        if(dir == Dir.UP) {
+        if(dir == GameLoad.GameLoadEnum.play1_up) {
             this.setY(this.getY()-2);
             if(this.getY()<=0) this.setY(0);
             else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
         }
-        if(dir == Dir.DOWN) {
+        if(dir == GameLoad.GameLoadEnum.play1_down) {
             this.setY(this.getY()+2);
             if(this.getY()<=0) this.setY(0);
             else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
@@ -61,7 +59,7 @@ public class Play extends ElementObj{
     @Override
     public void updateImg(long ... time) {
         if(!isMoving) return;
-        this.setIcon(GameLoad.playImgMap.get(dir));
+        this.setIcon(GameLoad.ImgMap.get(dir));
     }
     //添加子弹
     @Override
@@ -93,19 +91,19 @@ public class Play extends ElementObj{
 
             switch (key) {
                 case 37:
-                    dir = Dir.LEFT;
+                    dir = GameLoad.GameLoadEnum.play1_left;
                     isMoving=true;
                     break;
                 case 38:
-                    dir = Dir.UP;
+                    dir = GameLoad.GameLoadEnum.play1_up;
                     isMoving=true;
                     break;
                 case 39:
-                    dir = Dir.RIGHT;
+                    dir = GameLoad.GameLoadEnum.play1_right;
                     isMoving=true;
                     break;
                 case 40:
-                    dir = Dir.DOWN;
+                    dir = GameLoad.GameLoadEnum.play1_down;
                     isMoving=true;
                     break;
                 case 32://空格键攻击

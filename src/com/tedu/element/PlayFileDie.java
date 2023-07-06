@@ -1,5 +1,6 @@
 package com.tedu.element;
 
+import com.tedu.manager.GameLoad;
 import com.tedu.show.GameJFrame;
 
 import javax.swing.*;
@@ -14,14 +15,14 @@ public class PlayFileDie extends ElementObj{
 
         this.setX(X);
         this.setY(Y);
-        this.setIcon(new ImageIcon("image/boom/boom.png"));
+        this.setIcon(GameLoad.ImgMap.get(GameLoad.GameLoadEnum.BOOM));
         setW(35);
         setH(35);
         return this;
     }
     @Override
     public void showElement(Graphics g) {
-        System.out.println("PlayFileDie");
+//        System.out.println("PlayFileDie");
         g.drawImage(this.getIcon().getImage(), this.getX(), this.getY(), this.getW(), this.getH(), null);
         setLive(false);
     }

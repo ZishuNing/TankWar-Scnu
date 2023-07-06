@@ -8,6 +8,7 @@ import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,11 @@ public class GameThread extends Thread {
     public void run() {// 游戏的run方法，主线程
         // 游戏开始时 读进度条，加载资源
 
-        gameLoad();
+        try {
+            gameLoad();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         // 游戏进行时
         gameRun();
         // 游戏结束时 资源回收
@@ -38,8 +43,9 @@ public class GameThread extends Thread {
     /**
      * 游戏加载
      */
-    private void gameLoad() {
-        GameLoad.MapLoad(5);
+    private void gameLoad() throws IOException {
+
+        GameLoad.Init();
         loadPlay();
     }
     /**
@@ -54,8 +60,16 @@ public class GameThread extends Thread {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
+            List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
+            List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+            List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+
             moveAndUpdate(all,gameTime);
-            elementCollide();
+            //碰撞检测
+            ElementPK(enemys,playfiles);
+            ElementPK(playfiles,maps);
+
+
 
             gameTime++;// 开游戏到现在经过的帧数
             try {
@@ -68,26 +82,49 @@ public class GameThread extends Thread {
 
         }
     }
+
     /**
-     *对游戏中的对象进行碰撞检测
+     * pk 函数
+     * @param listA
+     * @param listb
      */
-    public void elementCollide()
+    public void ElementPK(List<ElementObj> listA, List<ElementObj> listb)
     {
-        List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
-        List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
-        for(ElementObj enemy:enemys)
+        for(ElementObj objA:listA)
         {
-            for(ElementObj playfile:playfiles)
+            for(ElementObj objB:listb)
             {
-               if (enemy.isCollide(playfile))
-               {
-                   enemy.setLive(false);
-                   playfile.setLive(false);
-                   break;
-               }
+                if (objA.isCollide(objB))
+                {
+                    objA.setLive(false);
+                    objB.setLive(false);
+                    break;
+                }
             }
         }
     }
+
+
+    /**
+     *对游戏中的对象进行碰撞检测
+     */
+//    public void elementCollide()
+//    {
+//        List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+//        List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
+//        for(ElementObj enemy:enemys)
+//        {
+//            for(ElementObj playfile:playfiles)
+//            {
+//               if (enemy.isCollide(playfile))
+//               {
+//                   enemy.setLive(false);
+//                   playfile.setLive(false);
+//                   break;
+//               }
+//            }
+//        }
+//    }
     /**
      *对游戏内某一帧中的元素集合进行遍历生存状态，若不为生存状态则调用死亡方法
      * @param all 元素管理器中的元素集合
@@ -119,8 +156,8 @@ public class GameThread extends Thread {
 
     public void loadPlay() {
 //		图片导入
-        ImageIcon icon=new ImageIcon("image/tank/play1/player1_up.png");
-        ElementObj obj=new Play(100,100,50,50,icon);//实例化对象
+
+        ElementObj obj=new Play(100,100,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
 //		讲对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
         em.addElement(obj, GameElement.PLAY);//直接添加

@@ -4,6 +4,7 @@ import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 import com.tedu.show.GameJFrame;
 import jdk.nashorn.internal.runtime.Debug;
 
@@ -16,7 +17,7 @@ public class PlayFile extends ElementObj{
     private int moveNum;
 
 
-    Play.Dir dir;//子弹方向
+    GameLoad.GameLoadEnum dir;//子弹方向
     PlayFile () {}
     //对构造函数封装(普通无图子弹)
     public  ElementObj createPlayFile(Play play, int attack, int moveNum) {
@@ -26,19 +27,19 @@ public class PlayFile extends ElementObj{
         this.setW(10);
         this.setH(10);
         switch (dir) {
-            case UP:
+            case play1_up:
                 this.setX(play.getX()+20);
                 this.setY(play.getY()-5);
                 break;
-            case DOWN:
+            case play1_down:
                 this.setX(play.getX()+20);
                 this.setY(play.getY()+40);
                 break;
-            case LEFT:
+            case play1_left:
                 this.setX(play.getX());
                 this.setY(play.getY()+20);
                 break;
-            case RIGHT:
+            case play1_right:
                 this.setX(play.getX()+40);
                 this.setY(play.getY()+20);
                 break;
@@ -63,16 +64,16 @@ public class PlayFile extends ElementObj{
             return;
         }
         switch (dir) {
-            case UP:
+            case play1_up:
                 this.setY(this.getY()-moveNum);
                 break;
-            case DOWN:
+            case play1_down:
                 this.setY(this.getY()+moveNum);
                 break;
-            case LEFT:
+            case play1_left:
                 this.setX(this.getX()-moveNum);
                 break;
-            case RIGHT:
+            case play1_right:
                 this.setX(this.getX()+moveNum);
                 break;
             default:

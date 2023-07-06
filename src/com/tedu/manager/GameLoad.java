@@ -6,12 +6,10 @@ import com.tedu.element.MapObj;
 import com.tedu.element.Play;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * @说明 游戏加载类，用于加载游戏资源，作为一个全局类，将图片唯一地加载到内存里面，方便复用
@@ -19,15 +17,21 @@ import java.util.Properties;
 public class GameLoad {
     private static ElementManager em = ElementManager.getManager();
 
-    public static Map<Play.Dir, ImageIcon> playImgMap;
+    public static void Init() throws IOException {
 
-    static {
-        playImgMap = new HashMap<>() ;
-        playImgMap.put(Play.Dir.UP, new ImageIcon("image/tank/play1/player1_up.png"));
-        playImgMap.put(Play.Dir.DOWN, new ImageIcon("image/tank/play1/player1_down.png"));
-        playImgMap.put(Play.Dir.LEFT, new ImageIcon("image/tank/play1/player1_left.png"));
-        playImgMap.put(Play.Dir.RIGHT, new ImageIcon("image/tank/play1/player1_right.png"));
+        Load();
+        MapLoad(5);
     }
+
+    // 需要加图片就在这里添加，然后在 com/tedu/text/GameData.properties 中加入对应的内容
+    public enum GameLoadEnum{
+        play1_up,play1_down,play1_left,play1_right,GRASS, BRICK, RIVER, IRON, BOOM
+    }
+
+    // 重构全局枚举类，用于存储图片
+    public static Map<GameLoadEnum, ImageIcon> ImgMap = new HashMap<GameLoadEnum, ImageIcon>();
+
+
     //读取文件的类
     private static Properties pro = new Properties();
     //传入地图ID加载地图
@@ -60,4 +64,25 @@ public class GameLoad {
             e.printStackTrace();
         }
     }
+
+    public static void Load() throws IOException {
+
+
+        try{
+            Properties prop = new Properties();
+            ClassLoader classLoader = GameLoad.class.getClassLoader();
+            InputStream in = classLoader.getResourceAsStream("com/tedu/text/GameData.properties");
+            prop.load(in);     ///加载属性列表
+            for (String key : prop.stringPropertyNames()) {
+                System.out.println(key + ":" + prop.getProperty(key));
+                ImgMap.put(GameLoadEnum.valueOf(key), new ImageIcon(prop.getProperty(key)));
+            }
+            assert in != null;
+            in.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
 }

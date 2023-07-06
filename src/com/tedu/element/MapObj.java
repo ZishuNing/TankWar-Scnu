@@ -1,9 +1,17 @@
 package com.tedu.element;
 
+import com.tedu.manager.GameLoad;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MapObj extends ElementObj{
+
+
+
+    private GameLoad.GameLoadEnum type;
+    private int hp;
+
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(), this.getX(), this.getY(), this.getW(), this.getH(), null);
@@ -15,16 +23,24 @@ public class MapObj extends ElementObj{
         switch (arr[0]) {
             // 设置图片信息，图片还未加载到内存中
             case "GRASS":
-                icon = new ImageIcon("image/wall/grass.png");
+                type = GameLoad.GameLoadEnum.GRASS;
+                hp = 1;
+                icon = GameLoad.ImgMap.get(type);
                 break;
             case "BRICK":
-                icon = new ImageIcon("image/wall/brick.png");
+                type = GameLoad.GameLoadEnum.BRICK;
+                hp = 5;
+                icon = GameLoad.ImgMap.get(type);
                 break;
             case "RIVER":
-                icon = new ImageIcon("image/wall/river.png");
+                type = GameLoad.GameLoadEnum.RIVER;
+                hp = 1;
+                icon = GameLoad.ImgMap.get(type);
                 break;
             case "IRON":
-                icon = new ImageIcon("image/wall/iron.png");
+                type = GameLoad.GameLoadEnum.IRON;
+                hp = 10;
+                icon = GameLoad.ImgMap.get(type);
                 break;
             default:
                 return null;
@@ -34,7 +50,32 @@ public class MapObj extends ElementObj{
         this.setH(icon.getIconHeight());
         this.setW(icon.getIconWidth());
         this.setIcon(icon);
-        // TODO: create and return ElementObj using the icon
+
         return this;
+    }
+
+    /**
+     * 扣血
+     * @param live
+     */
+    @Override
+    public void setLive(boolean live) {
+        if(!live){
+            switch (type){
+                case GRASS:
+                case RIVER:
+                    break;
+                case BRICK:
+                case IRON:
+                    hp--;
+                    if(hp==0){
+                        super.setLive(live);
+                    }
+                    break;
+            }
+        }
+
+
+        super.setLive(live);
     }
 }
