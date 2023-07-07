@@ -1,14 +1,10 @@
 package com.tedu.controller;
 
 import com.tedu.element.ElementObj;
-import com.tedu.element.Enemy;
-import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
-import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -21,8 +17,8 @@ import java.util.Map;
  */
 public class GameThread extends Thread {
 
+    private int Id;
     private ElementManager em=ElementManager.getManager();
-    private EnemyManager enemyManager = EnemyManager.getEnemyManager();
 
     @Override
     public void run() {// 游戏的run方法，主线程
@@ -30,9 +26,7 @@ public class GameThread extends Thread {
 
         try {
             gameLoad();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         // 游戏进行时
@@ -48,8 +42,7 @@ public class GameThread extends Thread {
      */
     private void gameLoad() throws IOException, ClassNotFoundException {
 
-        GameLoad.Init();
-        loadPlay();
+        GameLoad.Init(Id);
     }
     /**
      * 游戏进行
@@ -58,8 +51,8 @@ public class GameThread extends Thread {
      * 3.暂停
      */
     private void gameRun() {
+        long gameTime = 0;
         while(true){
-            long gameTime = 0;
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
@@ -67,9 +60,10 @@ public class GameThread extends Thread {
             List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
-
+            //每一帧对集合中所有的对象进行移动和图片的更新
             moveAndUpdate(all,gameTime);
-            //碰撞检测
+            //每一帧对对象进行碰撞检测
+            ElementPK(enemies,maps);
             ElementPK(enemies,playfiles);
             ElementPK(playfiles,maps);
             ElementPK(plays, maps);
@@ -128,7 +122,7 @@ public class GameThread extends Thread {
                     it.remove();
                     continue;
                 }
-                obj.update(gameTime);
+                obj.update(gameTime); //调用所有基类中射出子弹和移动的方法
             }
         }
     }
@@ -139,18 +133,8 @@ public class GameThread extends Thread {
 
     }
 
-    public void loadPlay() {
-//		图片导入
 
-        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
-//		讲对象放入到 元素管理器中
-//		em.getElementsByKey(GameElement.PLAY).add(obj);
-        em.addElement(obj, GameElement.PLAY);//直接添加
-
-        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
-            for (int i=0;i<3;i++)
-            {
-                em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
-            }
+    public void setId(int Id) {
+        this.Id = Id;
     }
 }

@@ -2,20 +2,17 @@ package com.tedu.show;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 //窗体：关闭、显示、最大最小化，需嵌入面板，启动主线程
 public class GameJFrame extends JFrame {
-    public static int GameX = 900;
+    public static int GameX = 800;
     public static int GameY = 600;
 
 //    public static int GameMs = 10; // 刷新时间
 
     private JPanel jPanel =null; //正在显示的面板
     private KeyListener keyListener=null;//键盘监听
-    private MouseMotionListener mouseMotionListener=null; //鼠标监听
-    private MouseListener mouseListener=null;
+
     private Thread thead=null;  //游戏主线程
     public GameJFrame() {
         init();
@@ -59,13 +56,7 @@ public class GameJFrame extends JFrame {
     public void setKeyListener(KeyListener keyListener) {
         this.keyListener = keyListener;
     }
-    public void setMouseMotionListener(MouseMotionListener mouseMotionListener) {
-        this.mouseMotionListener = mouseMotionListener;
-    }
-    public void setMouseListener(MouseListener mouseListener) {
-        this.mouseListener = mouseListener;
-    }
-    public void setThead(Thread thead) {
-        this.thead = thead;
+    public void setThread(Thread thread) {
+        this.thead = thread;
     }
 }

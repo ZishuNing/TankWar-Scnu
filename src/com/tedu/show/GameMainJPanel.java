@@ -3,15 +3,11 @@ package com.tedu.show;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.tedu.element.ElementObj;
-import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
-import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
 
 /**
@@ -47,10 +43,10 @@ public class GameMainJPanel extends JPanel implements Runnable{
 			}
 		}
 		// 显示当前得分
-		String scoreStr = "当前得分：" + EnemyManager.score;
+		String scoreStr = "当前得分：" + 0;
 		Font font = new Font("宋体", Font.BOLD, 20);
 		g.setFont(font);
-		g.drawString(scoreStr, 750, 20);
+		g.drawString(scoreStr, 650, 20);
 	}
 
 

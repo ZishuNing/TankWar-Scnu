@@ -13,36 +13,10 @@ public class Play extends ElementObj{
 //    private boolean shot=false;//是否已经发射
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
-
-    private int hp=100;//血量
+    private int safeValue = 30;//防穿模值
+    ;//血量
     // 重构枚举
-    public GameLoad.GameLoadEnum dir;
 
-    public Play(int x, int y, int w, int h, ImageIcon icon) {
-        super(x, y, w, h, icon);
-        this.obj_type = GameElement.PLAY;
-        dir = GameLoad.GameLoadEnum.play1_up;
-        this.setIcon(icon);
-    }
-
-    @Override
-    public void collide(GameElement type) {
-        switch (type){
-            case MAPS:
-            case ENEMY:
-            case PLAY:
-            case BOSS:
-                this.isMoving = false;
-                break;
-            case PLAYFILE:
-                hp--;
-                if(hp<=0) this.setLive(false);
-                break;
-
-        }
-
-
-    }
 
     /**
      * 重写移动方法
@@ -54,22 +28,22 @@ public class Play extends ElementObj{
         if(dir == GameLoad.GameLoadEnum.play1_left) {
             this.setX(this.getX()-2);
             if(this.getX()<=0) this.setX(0);
-            else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
+            else if(this.getX()>= GameJFrame.GameX-getW()-safeValue) this.setX(GameJFrame.GameX-getW()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_right) {
             this.setX(this.getX()+2);
             if(this.getX()<=0) this.setX(0);
-            else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
+            else if(this.getX()>= GameJFrame.GameX-getW()-safeValue) this.setX(GameJFrame.GameX-getW()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_up) {
             this.setY(this.getY()-2);
             if(this.getY()<=0) this.setY(0);
-            else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
+            else if(this.getY()>= GameJFrame.GameY-getH()-safeValue) this.setY(GameJFrame.GameY-getH()-safeValue);
         }
         if(dir == GameLoad.GameLoadEnum.play1_down) {
             this.setY(this.getY()+2);
             if(this.getY()<=0) this.setY(0);
-            else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
+            else if(this.getY()>= GameJFrame.GameY-getH()-safeValue) this.setY(GameJFrame.GameY-getH()-safeValue);
         }
     }
 
@@ -92,7 +66,24 @@ public class Play extends ElementObj{
         ElementManager.getManager().addElement(playFile, GameElement.PLAYFILE);
     }
 
-
+    @Override
+    public void collide(GameElement type) {
+        switch (type)
+        {
+            case PLAYFILE:
+                setHp(this.getHp()-1);
+                if (getHp()<=0)
+                {
+                    this.setLive(false);
+                }
+                break;
+            case BOSS:
+            case ENEMY:
+            case MAPS:
+                isMoving = false;
+                break;
+        }
+    }
 
     /**
      * 面向对象中第1个思想： 对象自己的事情自己做
@@ -150,4 +141,19 @@ public class Play extends ElementObj{
             }
         }
     }
+
+    @Override
+    public ElementObj createElement(String str) {
+        String[] arr = str.split(";");
+        this.setObj_type(GameElement.PLAY);
+        this.dir = GameLoad.GameLoadEnum.play1_up;
+        this.setX(Integer.parseInt(arr[0]));
+        this.setY(Integer.parseInt(arr[1]));
+        this.setW(Integer.parseInt(arr[2]));
+        this.setH(Integer.parseInt(arr[3]));
+        this.setHp(Integer.parseInt(arr[4]));
+        this.setIcon(GameLoad.ImgMap.get(dir));
+        return this;
+    }
+
 }
