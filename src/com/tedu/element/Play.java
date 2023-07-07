@@ -3,12 +3,15 @@ import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.show.GameJFrame;
 import com.tedu.manager.GameLoad;
+import com.tedu.web.GameWebHelper;
+
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
-public class Play extends ElementObj{
+public class Play extends ElementObj implements Serializable {
     public static int mainPlayId=0;
 //    private boolean shot=false;//是否已经发射
     private boolean pkType=false;//攻击状态 true则攻击
@@ -24,6 +27,7 @@ public class Play extends ElementObj{
         dir = GameLoad.GameLoadEnum.play1_up;
         this.setIcon(icon);
     }
+
 
     @Override
     public void collide(GameElement type) {
@@ -71,6 +75,7 @@ public class Play extends ElementObj{
             if(this.getY()<=0) this.setY(0);
             else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
         }
+
     }
 
 
@@ -149,11 +154,72 @@ public class Play extends ElementObj{
                     break;
             }
         }
+        GameWebHelper.boardCast(this);
+    }
+
+    public void setDir(GameLoad.GameLoadEnum dir) {
+        this.dir = dir;
+    }
+
+    public GameLoad.GameLoadEnum getDir() {
+        return dir;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public boolean getPkType() {
+        return pkType;
+    }
+
+    public void setPkType(boolean pkType) {
+        this.pkType = pkType;
+    }
+
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public static void setMainPlayId(int mainPlayId) {
+        Play.mainPlayId = mainPlayId;
+    }
+
+    public static int getMainPlayId() {
+    	return Play.mainPlayId;
     }
 
     // 重写toString
 
     public String ToString() {
-    	return ""+this.getId()+"," +this.getX()+","+this.getY()+","+this.getLive()+","+this.isMoving+","+this.pkType+","+this.hp+","+this.dir+";";
+    	return ""+this.getId()+"," +this.getX()+","+this.getY()+","+this.getLive()+","+this.isMoving+","+this.pkType+","+this.hp+","+this.dir.ordinal();
     }
+
+    public static Play FromString(String str) {
+        String[] args = str.split(",");
+
+
+
+        GameLoad.GameLoadEnum dir = GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])];
+
+        Play play = new Play(Integer.parseInt(args[1]), Integer.parseInt(args[2]), 50, 50, GameLoad.ImgMap.get(dir));
+        play.setId(Integer.parseInt(args[0]));
+        play.setLive(Boolean.parseBoolean(args[3]));
+        play.setMoving(Boolean.parseBoolean(args[4]));
+        play.setPkType(Boolean.parseBoolean(args[5]));
+        play.setHp(Integer.parseInt(args[6]));
+        play.setDir(GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])]);
+        return play;
+
+    }
+
 }

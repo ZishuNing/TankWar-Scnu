@@ -3,6 +3,7 @@ package com.tedu.controller;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
 import com.tedu.element.Play;
+import com.tedu.game.GameStart;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -20,15 +21,9 @@ import java.util.Map;
  */
 public class GameThread extends Thread {
 
-    private ElementManager em=ElementManager.getManager();
+    private ElementManager em=ElementManager.getManager();//得到元素管理器对象
 
-    private boolean isServer;
-    private boolean isMultiplayer;
 
-    public GameThread(boolean isServer, boolean isMultiplayer) {
-        this.isServer = isServer;
-        this.isMultiplayer = isMultiplayer;
-    }
 
     @Override
     public void run() {// 游戏的run方法，主线程
@@ -56,13 +51,18 @@ public class GameThread extends Thread {
 
         GameLoad.Init();
 
-        if(isMultiplayer && isServer){
+        if(GameStart.isMultiplayer && GameStart.isServer){
             loadMultiple();
+        }else if(GameStart.isMultiplayer && !GameStart.isServer){
+            loadMultipleClient();
         }else{
             loadPlay();
         }
 
     }
+
+
+
     /**
      * 游戏进行
      * 1.玩家的移动、碰撞、死亡
@@ -154,12 +154,23 @@ public class GameThread extends Thread {
     }
 
     /**
+     * 作为多人模式的客户端加载
+     */
+    private void loadMultipleClient() {
+//        ElementObj obj=new Play(100,100,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+//        obj.setId(2);
+//
+//        em.addElement(obj, GameElement.PLAY);//直接添加
+    }
+
+    /**
      * 多人游戏加载
      */
     private void loadMultiple(){
         ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
         // 作为服务器端，或第一个进入游戏的玩家设置的id
-        obj.setId(1);
+        obj.setId(0);
+        Play.setMainPlayId(0);
 
         em.addElement(obj, GameElement.PLAY);//直接添加
     }

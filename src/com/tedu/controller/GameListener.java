@@ -1,6 +1,8 @@
 package com.tedu.controller;
 
 import com.tedu.element.ElementObj;
+import com.tedu.element.Play;
+import com.tedu.game.GameStart;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
@@ -34,7 +36,16 @@ public class GameListener implements KeyListener {
         }
         List<ElementObj> play = em.getElementsByKey(GameElement.PLAY);
         for(ElementObj obj:play) {
-            obj.keyClick(true, e.getKeyCode());
+            if(GameStart.isMultiplayer){
+                if(obj.getId()== Play.getMainPlayId()){
+                    obj.keyClick(true, e.getKeyCode());
+                    break;
+                }
+
+            }else{
+                obj.keyClick(true, e.getKeyCode());
+            }
+
         }
     }
     //松开
@@ -48,7 +59,14 @@ public class GameListener implements KeyListener {
         set.remove(key);
         List<ElementObj> play = em.getElementsByKey(GameElement.PLAY);
         for(ElementObj obj:play) {
-            obj.keyClick(false, e.getKeyCode());
+            if(GameStart.isMultiplayer){
+                if(obj.getId()== Play.getMainPlayId()){
+                    obj.keyClick(false, e.getKeyCode());
+                    break;
+                }
+            }else{
+                obj.keyClick(false, e.getKeyCode());
+            }
         }
     }
 }

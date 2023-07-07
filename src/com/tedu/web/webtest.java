@@ -2,23 +2,21 @@ package com.tedu.web;
 import com.tedu.controller.GameThread;
 import com.tedu.element.Play;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.lang.Thread.*;
 
 public class webtest {
     public static void main(String[] args) throws InterruptedException, IOException {
 
-        GameServer server = new GameServer();
-        Thread thread = new Thread(server);
-        thread.start();
-
-
-
-        Thread.sleep(100);
-        GameClient client = new GameClient();
-        Thread thread2 = new Thread(client);
-        thread2.start();
-        Thread.sleep(100);
-        server.boardCast(new Play(1, 1, 1, 1, null));
+//        Data data  = new Data(Data.Type.PLAY_STATUS, null, null, null, null);
+//        byte[] sendData = data.serialize();
+//        System.out.println(sendData.length);
+//
+//        Play play = new Play(0,0,0,0,new ImageIcon("image/tank/play1/player1_down.png"));
+//        data = new Data(Data.Type.PLAY_STATUS, null, null, null, play.ToString().getBytes());
+//
+//        sendData = data.serialize();
+//        System.out.println(sendData.length);
     }
 }

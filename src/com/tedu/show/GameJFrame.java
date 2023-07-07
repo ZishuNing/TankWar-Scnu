@@ -41,7 +41,7 @@ public class GameJFrame extends JFrame {
             thead.start();//启动线程
         }
         if(webThread !=null) {
-            webThread.start();//启动线程
+            webThread.start();//启动web线程
         }
 //		界面的刷新
         this.setVisible(true);//显示界面
