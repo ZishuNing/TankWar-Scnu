@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class GameMenuJPanel extends JPanel {
     private CenterJpanel centerJp = null;//中间图形面板
-    private JPanel bottomJp = null;//底部按钮面板
+    private JPanel bottomJp = null;//底部按钮面板//
     private Image image = null;//背景图片
     private JButton startBtn = new JButton("开始游戏");
     private JButton map1Btn = new JButton("进入地图1");
