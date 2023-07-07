@@ -7,6 +7,7 @@ import com.tedu.game.GameStart;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
+import com.tedu.web.GameWebHelper;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -157,6 +158,20 @@ public class GameThread extends Thread {
      * 作为多人模式的客户端加载
      */
     private void loadMultipleClient() {
+        // 等待客户端连接到服务器
+
+        System.out.println("等待连接到服务器");
+        GameWebHelper.lock.lock();
+        while(!GameWebHelper.isLoad){
+            try {
+                GameWebHelper.loaded.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        GameWebHelper.lock.unlock();
+        System.out.println("连接到服务器");
+
 //        ElementObj obj=new Play(100,100,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
 //        obj.setId(2);
 //

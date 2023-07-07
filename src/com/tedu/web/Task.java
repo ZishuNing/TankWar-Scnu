@@ -97,11 +97,21 @@ public class Task implements Runnable {
 
             gameClient.boardCast((Play) elementObj);
 
+            // 通知主线程可以Client已经加载完毕
+            GameWebHelper.lock.lock();
+            GameWebHelper.isLoad = true;
+            GameWebHelper.loaded.signalAll();
+            GameWebHelper.lock.unlock();
+
         }else if(recedata.type == Data.Type.PLAY_STATUS){
             System.out.println("play_status from"+ packet.getAddress() + ":" + packet.getPort());
 
             ElementManager.getManager().updatePlayElement(Play.FromString(new String(recedata.data)));
 
+        }else if(recedata.type == Data.Type.ADD_PEER) {
+            System.out.println("play_add from" + packet.getAddress() + ":" + packet.getPort());
+
+            gameClient.addPeer(Peer.fromString(new String(recedata.data)));
         }
     }
 
@@ -129,6 +139,9 @@ public class Task implements Runnable {
                 serverSocket.send(sendPacket);
 
                 Peer peer = new Peer(IPAddress, port);
+
+                gameServer.boardCast(peer);
+
                 gameServer.addPeer(peer);
 
             }else if(data.type == Data.Type.PLAY_STATUS){

@@ -16,7 +16,6 @@ public class GameServer extends Thread{
 
     private DatagramSocket serverSocket;
 
-    ExecutorService executor; // 线程池
 
     public synchronized void addPeer(Peer peer) {
         peers.add(peer);
@@ -24,6 +23,22 @@ public class GameServer extends Thread{
 
     public synchronized List<Peer> getPeers() {
         return peers;
+    }
+
+    public void boardCast(Peer peer) {
+        Data data = new Data(Data.Type.ADD_PEER, null, null, peer.toString().getBytes());
+        try {
+            byte[] sendData = data.serialize();
+            for (Peer each_peer : peers) {
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length);
+                sendPacket.setAddress(each_peer.IPAddress);
+                sendPacket.setPort(each_peer.port);
+                webPool.addTask(new Task(2, Task.TaskType.SEND, sendPacket, serverSocket, this,null));
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void boardCast(Play play) throws IOException {
@@ -112,13 +127,4 @@ public class GameServer extends Thread{
 
 }
 
-class Peer implements Serializable{
-    public Peer(InetAddress IPAddress, int port) {
-        this.IPAddress = IPAddress;
-        this.port = port;
-    }
 
-
-    public InetAddress IPAddress;
-    public int port;
-}

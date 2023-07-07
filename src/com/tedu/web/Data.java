@@ -13,8 +13,8 @@ public class Data implements Serializable{// 存放交换数据的类
     enum Type{
         HELLO,// 客户端向服务器发送的第一个数据包，广播的数据包
         HELLO_REPLY,// 服务器向客户端回复，发送EM
-
         PLAY_STATUS,// 客户端向服务器发送的游戏状态数据包
+        ADD_PEER,// 服务器向客户端发送的添加新玩家的数据包
     }
 
     public static Data Deserialize(byte[] serialData) throws IOException, ClassNotFoundException {
