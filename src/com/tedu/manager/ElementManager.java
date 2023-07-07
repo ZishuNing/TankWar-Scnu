@@ -35,7 +35,6 @@ public class ElementManager implements Serializable {
         in.close();
         fileIn.close();
         System.out.println("Deserialized data:");
-
     }
 
 
@@ -70,8 +69,5 @@ public class ElementManager implements Serializable {
 		for(GameElement ge:GameElement.values()){
             gameElements.put(ge,new ArrayList<ElementObj>());
         }
-
-
-
     }
 }

@@ -76,7 +76,7 @@ public class PlayFile extends ElementObj{
     }
 
     @Override
-    protected void move(long ... time) {
+    public void move(long ... time) {
         if(this.getX()<=0||this.getX()>= GameJFrame.GameX ||this.getY()<=0||this.getY()>=GameJFrame.GameY){
             // 出了边界就死了
             this.setLive(false);

@@ -16,22 +16,11 @@ public class GameStart {
         GameMainJPanel jp=new GameMainJPanel();
         //实例化监听
 		GameListener listener = new GameListener();
-
-
-
         // 实例化主线程
         GameThread gt=new GameThread();
-
-
-
         gj.setThead(gt);
         gj.setjPanel(jp);
         gj.setKeyListener(listener);
         gj.start();
-
-
-
     }
-
-
 }

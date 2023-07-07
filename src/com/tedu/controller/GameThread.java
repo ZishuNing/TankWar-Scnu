@@ -4,6 +4,7 @@ import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
 import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
+import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 public class GameThread extends Thread {
 
     private ElementManager em=ElementManager.getManager();
-
+    private EnemyManager enemyManager = EnemyManager.getEnemyManager();
 
     @Override
     public void run() {// 游戏的run方法，主线程
@@ -63,19 +64,17 @@ public class GameThread extends Thread {
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
             List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
-            List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+            List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
 
             moveAndUpdate(all,gameTime);
             //碰撞检测
-            ElementPK(enemys,playfiles);
+            ElementPK(enemies,playfiles);
             ElementPK(playfiles,maps);
             ElementPK(plays, maps);
             ElementPK(plays, playfiles);
-            ElementPK(plays, enemys);
-
-
+            ElementPK(plays, enemies);
 
             gameTime++;// 开游戏到现在经过的帧数
             try {
@@ -149,7 +148,7 @@ public class GameThread extends Thread {
         em.addElement(obj, GameElement.PLAY);//直接添加
 
         // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
-            for (int i=0;i<10;i++)
+            for (int i=0;i<3;i++)
             {
                 em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
             }

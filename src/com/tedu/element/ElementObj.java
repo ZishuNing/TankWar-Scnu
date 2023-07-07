@@ -113,7 +113,7 @@ public abstract class ElementObj implements Serializable {
     /**
      * 移动方法，需要移动的子类需重写
      */
-    protected void move(long ... time){}
+    public void move(long... time){}
 
     /**
      * 更新图片方法，需要更新图片的子类需重写
@@ -181,6 +181,7 @@ public abstract class ElementObj implements Serializable {
     public void setObj_type(GameElement obj_type) {
         this.obj_type = obj_type;
     }
+
 }
 
 

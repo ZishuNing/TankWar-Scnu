@@ -18,7 +18,6 @@ public class GameLoad {
     private static ElementManager em = ElementManager.getManager();
 
     public static void Init() throws IOException {
-
         Load();
         MapLoad(5);
     }
