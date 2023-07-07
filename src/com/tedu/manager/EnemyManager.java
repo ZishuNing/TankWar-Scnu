@@ -7,7 +7,10 @@ import java.util.List;
 
 public class EnemyManager {
     private static EnemyManager em;
+    // 敌人集合
     public List<ElementObj> enemies;
+    //当前得分
+    public static int score = 0;
     // 敌人方向枚举
     public enum EnemyDir{
         LEFT,RIGHT,UP,DOWN

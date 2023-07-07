@@ -42,7 +42,10 @@ public class Enemy extends ElementObj{
             case PLAYFILE:
                 hp--;
                 //增加计分
-                if (hp <= 0) this.setLive(false);
+                if (hp <= 0) {
+                    this.setLive(false);
+                    EnemyManager.score++;
+                }
                 break;
         }
     }

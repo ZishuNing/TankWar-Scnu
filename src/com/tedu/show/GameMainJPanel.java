@@ -1,6 +1,6 @@
 package com.tedu.show;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
+import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
 
 /**
@@ -45,7 +46,11 @@ public class GameMainJPanel extends JPanel implements Runnable{
 				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
 			}
 		}
-		
+		// 显示当前得分
+		String scoreStr = "当前得分：" + EnemyManager.score;
+		Font font = new Font("宋体", Font.BOLD, 20);
+		g.setFont(font);
+		g.drawString(scoreStr, 750, 20);
 	}
 
 
