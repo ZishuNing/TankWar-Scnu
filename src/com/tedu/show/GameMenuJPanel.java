@@ -23,6 +23,8 @@ public class GameMenuJPanel extends JPanel {
 
     /**
      * 构造方法生成面板
+     * 通过IO流获取图片
+     * 初始时使开始按钮可见，而进入其他地图的按钮不可见
      */
     public GameMenuJPanel(){
         try {
@@ -55,6 +57,10 @@ public class GameMenuJPanel extends JPanel {
             g.drawImage(image,0,0,null);
         }
     }
+/**
+ * 按钮的监听事件，将主窗口的面板换为游戏面板，同时注意设置线程的ID值，防止无法读入配置文件
+ * 注意当按下按钮时，要把焦点设置回窗口，不然GameListener监听的对象为按钮
+ */
 
     private void addListener(){
         startBtn.addActionListener(new ActionListener() {
@@ -69,14 +75,15 @@ public class GameMenuJPanel extends JPanel {
         map1Btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //获取线程、监听、面板等并设置线程的入口值
                 GameThread gameThread = GameStart.getGameThread();
                 GameMainJPanel gameMainJPanel = GameStart.getjPanel();
                 GameListener gameListener = GameStart.getListener();
                 gameThread.setId(1);
-
+                //通过获取按钮而获取父窗口
                 JButton button = (JButton) e.getSource();
                 GameJFrame gameJFrame = (GameJFrame) button.getRootPane().getParent();
-
+                //将焦点设置为父窗口并且设置然后启动父窗口
                 gameJFrame.requestFocus();
                 gameJFrame.setjPanel(gameMainJPanel);
                 gameJFrame.setThread(gameThread);
