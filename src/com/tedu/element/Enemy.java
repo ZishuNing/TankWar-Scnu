@@ -2,6 +2,7 @@ package com.tedu.element;
 
 import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
+import com.tedu.show.EndJPanel;
 import com.tedu.show.GameJFrame;
 import com.tedu.show.GameMainJPanel;
 
@@ -28,7 +29,7 @@ public class Enemy extends ElementObj{
         this.setH(50);
         this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
         this.obj_type = GameElement.ENEMY;
-        //EnemyManager.getEnemyManager().RegisterEnemy(this);
+        EnemyManager.RegisterEnemy(this);
         return this;
     }
     @Override
@@ -46,10 +47,6 @@ public class Enemy extends ElementObj{
                 if (hp <= 0) {
                     this.setLive(false);
                     EnemyManager.score++;
-                    if(EnemyManager.score==EnemyManager.enemies.size()){
-                        //游戏结束，显示最终得分面板五秒
-                        System.out.println("游戏结束");
-                    }
                 }
                 break;
         }

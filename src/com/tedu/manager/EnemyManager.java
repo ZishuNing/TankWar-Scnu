@@ -3,6 +3,7 @@ package com.tedu.manager;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyManager {
@@ -16,7 +17,10 @@ public class EnemyManager {
         LEFT,RIGHT,UP,DOWN
     }
     private EnemyManager() {
-        enemies = ElementManager.getManager().getElementsByKey(GameElement.ENEMY);
+        enemies = new ArrayList<ElementObj>();
+    }
+    public static void RegisterEnemy(ElementObj enemy) {
+        enemies.add(enemy);
     }
 
     public static synchronized EnemyManager getEnemyManager() {
