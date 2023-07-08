@@ -2,6 +2,7 @@ package com.tedu.show;
 
 import com.tedu.controller.GameListener;
 import com.tedu.controller.GameThread;
+import com.tedu.game.GameStart;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -68,45 +69,56 @@ public class GameMenuJPanel extends JPanel {
         map1Btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameThread gameThread = new GameThread();
+                GameThread gameThread = GameStart.getGameThread();
+                GameMainJPanel gameMainJPanel = GameStart.getjPanel();
+                GameListener gameListener = GameStart.getListener();
                 gameThread.setId(1);
-                GameMainJPanel jP = new GameMainJPanel();
-                GameListener listener = new GameListener();
+
                 JButton button = (JButton) e.getSource();
-                 GameJFrame gameJFrame  = (GameJFrame) button.getRootPane().getParent();
-                 gameJFrame.setjPanel(jP);
-                 gameJFrame.setThread(gameThread);
-                 gameJFrame.setKeyListener(listener);
-                 gameJFrame.start();
+                GameJFrame gameJFrame = (GameJFrame) button.getRootPane().getParent();
+
+                gameJFrame.requestFocus();
+                gameJFrame.setjPanel(gameMainJPanel);
+                gameJFrame.setThread(gameThread);
+                gameJFrame.setKeyListener(gameListener);
+                gameJFrame.start();
             }
         });
         map2Btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameThread gameThread = new GameThread();
+                GameThread gameThread = GameStart.getGameThread();
+                GameMainJPanel gameMainJPanel = GameStart.getjPanel();
+                GameListener gameListener = GameStart.getListener();
                 gameThread.setId(2);
-                GameMainJPanel jP = new GameMainJPanel();
-                GameListener listener = new GameListener();
+
                 JButton button = (JButton) e.getSource();
-                GameJFrame gameJFrame  = (GameJFrame) button.getRootPane().getParent();
-                gameJFrame.setjPanel(jP);
+                GameJFrame gameJFrame = (GameJFrame) button.getRootPane().getParent();
+
+                gameJFrame.requestFocus();
+                gameJFrame.remove(GameStart.getJp());
+                gameJFrame.setjPanel(gameMainJPanel);
                 gameJFrame.setThread(gameThread);
-                gameJFrame.setKeyListener(listener);
+                gameJFrame.setKeyListener(gameListener);
                 gameJFrame.start();
             }
         });
         map3Btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameThread gameThread = new GameThread();
+                GameThread gameThread = GameStart.getGameThread();
+                GameMainJPanel gameMainJPanel = GameStart.getjPanel();
+                GameListener gameListener = GameStart.getListener();
                 gameThread.setId(3);
-                GameMainJPanel jP = new GameMainJPanel();
-                GameListener listener = new GameListener();
+
                 JButton button = (JButton) e.getSource();
-                GameJFrame gameJFrame  = (GameJFrame) button.getRootPane().getParent();
-                gameJFrame.setjPanel(jP);
+                GameJFrame gameJFrame = (GameJFrame) button.getRootPane().getParent();
+
+                gameJFrame.requestFocus();
+                gameJFrame.remove(GameStart.getJp());
+                gameJFrame.setjPanel(gameMainJPanel);
                 gameJFrame.setThread(gameThread);
-                gameJFrame.setKeyListener(listener);
+                gameJFrame.setKeyListener(gameListener);
                 gameJFrame.start();
             }
         });

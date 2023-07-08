@@ -6,6 +6,7 @@ import com.tedu.manager.GameLoad;
 import com.tedu.show.GameJFrame;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Random;
 
 public class Enemy extends ElementObj {
@@ -14,6 +15,7 @@ public class Enemy extends ElementObj {
     private int movingTime = random;
     private boolean isLoop = false;
     private boolean pkType = false;
+    private ElementManager em = ElementManager.getManager();
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(), this.getX(), this.getY(), this.getW(), this.getH(), null);
@@ -186,4 +188,5 @@ public class Enemy extends ElementObj {
                 break;
         }
     }
+
 }

@@ -11,18 +11,30 @@ import com.tedu.show.GameMenuJPanel;
 import java.io.*;
 
 public class GameStart {
+    private static GameMainJPanel jPanel = new GameMainJPanel();
+    private static GameThread gameThread = new GameThread();
+    private static GameMenuJPanel jp=new GameMenuJPanel();
+    private static GameListener listener = new GameListener();
     //程序入口
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         GameJFrame gj=new GameJFrame();
-        GameMainJPanel jp=new GameMainJPanel();
-        //实例化监听
-        GameListener listener = new GameListener();
-        GameThread thread = new GameThread();
-        thread.setId(2);
-        // 实例化主线程
         gj.setjPanel(jp);
-        gj.setKeyListener(listener);
-        gj.setThread(thread);
         gj.start();
+    }
+
+    public static GameMainJPanel getjPanel() {
+        return jPanel;
+    }
+
+    public static GameThread getGameThread() {
+        return gameThread;
+    }
+
+    public static GameMenuJPanel getJp() {
+        return jp;
+    }
+
+    public static GameListener getListener() {
+        return listener;
     }
 }

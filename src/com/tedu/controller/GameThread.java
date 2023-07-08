@@ -85,18 +85,18 @@ public class GameThread extends Thread {
     /**
      * pk 函数
      * @param listA
-     * @param listb
+     * @param listB
      */
-    public void ElementPK(List<ElementObj> listA, List<ElementObj> listb)
+    public void ElementPK(List<ElementObj> listA, List<ElementObj> listB)
     {
-        for(ElementObj objA:listA)
+        for(int i=0;i<listA.size();i++)
         {
-            for(ElementObj objB:listb)
+            for(int j=0;j< listB.size();j++)
             {
-                if (objA.isCollide(objB))
+                if (listA.get(i).isCollide(listB.get(j)))
                 {
-                    objA.collide(objB.getObj_type());
-                    objB.collide(objA.getObj_type());
+                    listA.get(i).collide(listB.get(j).getObj_type());
+                    listB.get(j).collide(listA.get(i).getObj_type());
                     break;
                 }
             }
@@ -124,6 +124,7 @@ public class GameThread extends Thread {
                 }
                 obj.update(gameTime); //调用所有基类中射出子弹和移动的方法
             }
+
         }
     }
     /**

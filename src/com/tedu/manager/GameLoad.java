@@ -127,6 +127,7 @@ public class GameLoad {
                 System.out.println(key + ":" + prop.getProperty(key));
                 ImgMap.put(GameLoadEnum.valueOf(key), new ImageIcon(prop.getProperty(key)));
             }
+            prop.clear();
             assert in != null;
             in.close();
         }

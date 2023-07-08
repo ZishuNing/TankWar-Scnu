@@ -97,6 +97,7 @@ public class Play extends ElementObj{
                 this.getW(), this.getH(), null);
     }
     //重写键盘输入
+    @Override
     public void keyClick(boolean bl, int key) {
         if (bl) {
 
