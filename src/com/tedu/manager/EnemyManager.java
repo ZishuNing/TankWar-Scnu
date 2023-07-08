@@ -8,7 +8,7 @@ import java.util.List;
 public class EnemyManager {
     private static EnemyManager em;
     // 敌人集合
-    public List<ElementObj> enemies;
+    public static List<ElementObj> enemies;
     //当前得分
     public static int score = 0;
     // 敌人方向枚举
@@ -18,9 +18,7 @@ public class EnemyManager {
     private EnemyManager() {
         enemies = ElementManager.getManager().getElementsByKey(GameElement.ENEMY);
     }
-//    public void RegisterEnemy(Enemy enemy) {
-//        enemies.add(enemy);
-//    }
+
     public static synchronized EnemyManager getEnemyManager() {
         if(em == null) {//控制锁定
             em = new EnemyManager();
