@@ -83,19 +83,35 @@ public class Task implements Runnable {
             System.out.println("hello_reply from"+ packet.getAddress() + ":" + packet.getPort());
 
             gameClient.setPeers(recedata.peers);
+
+            Map<GameElement, List<ElementObj>> game_elements = recedata.gameElements;
+            recedata.gameElements.get(GameElement.PLAY).forEach((elementObj)->{
+                Play it = (Play) elementObj;
+                GameLoad.GameLoadEnum gameLoadEnum = it.getDir();
+                if(gameLoadEnum == GameLoad.GameLoadEnum.play1_up || gameLoadEnum == GameLoad.GameLoadEnum.play1_down || gameLoadEnum == GameLoad.GameLoadEnum.play1_left || gameLoadEnum == GameLoad.GameLoadEnum.play1_right){
+                    it.setDir(Play.play1ToPlay2(gameLoadEnum));
+                    it.setIcon(GameLoad.ImgMap.get(it.getDir()));
+                    return;
+                }
+            });
+
             ElementManager.setGameElements(recedata.gameElements);
 
             gameClient.addPeer(new Peer(packet.getAddress(), packet.getPort()));
 
             int id = recedata.peers.size() +1 ;
-            ElementObj elementObj = new Play(0,0,50,50, GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));
+            ElementObj elementObj = new Play(0,0,35,35, GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));
             elementObj.setId(id);
 
             ElementManager.getManager().addElement(elementObj, GameElement.PLAY);
 
+
+
             Play.setMainPlayId(id);
 
             gameClient.boardCast((Play) elementObj);
+
+
 
             // 通知主线程可以Client已经加载完毕
             GameWebHelper.lock.lock();

@@ -182,7 +182,7 @@ public class GameThread extends Thread {
      * 多人游戏加载
      */
     private void loadMultiple(){
-        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        ElementObj obj=new Play(0,0,35,35,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
         // 作为服务器端，或第一个进入游戏的玩家设置的id
         obj.setId(0);
         Play.setMainPlayId(0);
@@ -193,7 +193,7 @@ public class GameThread extends Thread {
     public void loadPlay() {
 //		图片导入
 
-        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        ElementObj obj=new Play(0,0,35,35,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
 //		讲对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
         em.addElement(obj, GameElement.PLAY);//直接添加

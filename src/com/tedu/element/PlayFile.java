@@ -29,18 +29,22 @@ public class PlayFile extends ElementObj{
         this.setH(10);
         switch (dir) {
             case play1_up:
+            case play2_up:
                 this.setX(play.getX()+20);
                 this.setY(play.getY()-5);
                 break;
             case play1_down:
+            case play2_down:
                 this.setX(play.getX()+20);
                 this.setY(play.getY()+40);
                 break;
             case play1_left:
+            case play2_left:
                 this.setX(play.getX());
                 this.setY(play.getY()+20);
                 break;
             case play1_right:
+            case play2_right:
                 this.setX(play.getX()+40);
                 this.setY(play.getY()+20);
                 break;
@@ -84,15 +88,19 @@ public class PlayFile extends ElementObj{
         }
         switch (dir) {
             case play1_up:
+            case play2_up:
                 this.setY(this.getY()-moveNum);
                 break;
             case play1_down:
+            case play2_down:
                 this.setY(this.getY()+moveNum);
                 break;
             case play1_left:
+            case play2_left:
                 this.setX(this.getX()-moveNum);
                 break;
             case play1_right:
+            case play2_right:
                 this.setX(this.getX()+moveNum);
                 break;
             default:

@@ -17,6 +17,7 @@ public class Play extends ElementObj implements Serializable {
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
 
+    private static int bias=GameLoad.GameLoadEnum.play2_up.ordinal()-GameLoad.GameLoadEnum.play1_up.ordinal(); // 两个枚举的偏移量
     private int hp=100;//血量
     // 重构枚举
     public GameLoad.GameLoadEnum dir;
@@ -55,22 +56,22 @@ public class Play extends ElementObj implements Serializable {
     @Override
     public void move(long ... time) {
         if(!isMoving) return;
-        if(dir == GameLoad.GameLoadEnum.play1_left) {
+        if(dir == GameLoad.GameLoadEnum.play1_left || dir == GameLoad.GameLoadEnum.play2_left) {
             this.setX(this.getX()-2);
             if(this.getX()<=0) this.setX(0);
             else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
         }
-        if(dir == GameLoad.GameLoadEnum.play1_right) {
+        if(dir == GameLoad.GameLoadEnum.play1_right || dir == GameLoad.GameLoadEnum.play2_right) {
             this.setX(this.getX()+2);
             if(this.getX()<=0) this.setX(0);
             else if(this.getX()>= GameJFrame.GameX-getW()) this.setX(GameJFrame.GameX-getW());
         }
-        if(dir == GameLoad.GameLoadEnum.play1_up) {
+        if(dir == GameLoad.GameLoadEnum.play1_up || dir == GameLoad.GameLoadEnum.play2_up) {
             this.setY(this.getY()-2);
             if(this.getY()<=0) this.setY(0);
             else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
         }
-        if(dir == GameLoad.GameLoadEnum.play1_down) {
+        if(dir == GameLoad.GameLoadEnum.play1_down || dir == GameLoad.GameLoadEnum.play2_down) {
             this.setY(this.getY()+2);
             if(this.getY()<=0) this.setY(0);
             else if(this.getY()>= GameJFrame.GameY-getH()) this.setY(GameJFrame.GameY-getH());
@@ -198,8 +199,36 @@ public class Play extends ElementObj implements Serializable {
     	return Play.mainPlayId;
     }
 
-    // 重写toString
+    public static GameLoad.GameLoadEnum play1ToPlay2(GameLoad.GameLoadEnum dir) {
+        switch (dir) {
+            case play1_left:
+                return GameLoad.GameLoadEnum.play2_left;
+            case play1_right:
+                return GameLoad.GameLoadEnum.play2_right;
+            case play1_down:
+                return GameLoad.GameLoadEnum.play2_down;
+            case play1_up:
+            default:
+                return GameLoad.GameLoadEnum.play2_up;
+        }
+    }
 
+    public static GameLoad.GameLoadEnum play2ToPlay1(GameLoad.GameLoadEnum dir) {
+        switch (dir) {
+            case play2_left:
+                return GameLoad.GameLoadEnum.play1_left;
+            case play2_right:
+                return GameLoad.GameLoadEnum.play1_right;
+            case play2_down:
+                return GameLoad.GameLoadEnum.play1_down;
+            case play2_up:
+            default:
+                return GameLoad.GameLoadEnum.play1_up;
+        }
+    }
+
+
+    // 重写toString
     public String ToString() {
     	return ""+this.getId()+"," +this.getX()+","+this.getY()+","+this.getLive()+","+this.isMoving+","+this.pkType+","+this.hp+","+this.dir.ordinal();
     }
@@ -209,15 +238,17 @@ public class Play extends ElementObj implements Serializable {
 
 
 
-        GameLoad.GameLoadEnum dir = GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])];
+        GameLoad.GameLoadEnum dir = GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])+bias];
 
-        Play play = new Play(Integer.parseInt(args[1]), Integer.parseInt(args[2]), 50, 50, GameLoad.ImgMap.get(dir));
+        Play play = new Play(Integer.parseInt(args[1]), Integer.parseInt(args[2]), 35, 35, GameLoad.ImgMap.get(dir));
         play.setId(Integer.parseInt(args[0]));
         play.setLive(Boolean.parseBoolean(args[3]));
         play.setMoving(Boolean.parseBoolean(args[4]));
         play.setPkType(Boolean.parseBoolean(args[5]));
         play.setHp(Integer.parseInt(args[6]));
-        play.setDir(GameLoad.GameLoadEnum.values()[Integer.parseInt(args[7])]);
+
+//        play.setDir(Play.play1ToPlay2(dir));
+        play.setDir(dir);
         return play;
 
     }

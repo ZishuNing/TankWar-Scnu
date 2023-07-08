@@ -25,7 +25,7 @@ public class GameLoad {
 
     // 需要加图片就在这里添加，然后在 com/tedu/text/GameData.properties 中加入对应的内容
     public enum GameLoadEnum{
-        play1_up,play1_down,play1_left,play1_right,GRASS, BRICK, RIVER, IRON, BOOM
+        play1_up,play1_down,play1_left,play1_right,GRASS, BRICK, RIVER, IRON, BOOM, play2_up, play2_down, play2_left, play2_right,
     }
 
     // 重构全局枚举类，用于存储图片
