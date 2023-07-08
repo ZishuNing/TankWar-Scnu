@@ -21,8 +21,8 @@ import com.tedu.manager.GameElement;
 public class GameMainJPanel extends JPanel implements Runnable{
 //	联动管理器
 	private ElementManager em;
-	private boolean firstTime = true;
-	private int enemyNum = 0;
+	private boolean firstTime = true; //是否为第一次遍历，注意由于线程的缘故，可能第一次遍历敌人的list后出来的初始敌人数量仍为0
+	private int enemyNum = 0;//初始敌人数量
 	public GameMainJPanel() {
 		init();
 	}
