@@ -2,9 +2,7 @@ package com.tedu.element;
 
 import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
-import com.tedu.show.EndJPanel;
 import com.tedu.show.GameJFrame;
-import com.tedu.show.GameMainJPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +10,22 @@ import java.util.Random;
 
 public class Enemy extends ElementObj{
     private boolean isMoving=false;
+    private String name;
+    private Color color;
     EnemyManager.EnemyDir dir= EnemyManager.EnemyDir.RIGHT;
-    private int hp=5;//血量
+    private int CurrentHp =5;//血量
+    private int MaxHp=5;
+    private BloodBar bar=new BloodBar();
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(),this.getX(),this.getY(),this.getW(),this.getH(),null);
+        drawName(g);
+        bar.draw(g);
+    }
+    private void drawName(Graphics g){
+        g.setColor(color);
+        g.setFont(new Font("宋体",Font.BOLD,20));
+        g.drawString(name,getX()-30,getY()-15);
     }
     @Override
     public ElementObj createElement(String str) {
@@ -29,6 +38,9 @@ public class Enemy extends ElementObj{
         this.setH(50);
         this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
         this.obj_type = GameElement.ENEMY;
+        this.name = EnemyManager.getRandomName();
+        this.color = EnemyManager.getRandomColor();
+        this.MaxHp=CurrentHp;
         EnemyManager.RegisterEnemy(this);
         return this;
     }
@@ -42,9 +54,9 @@ public class Enemy extends ElementObj{
                 this.isMoving = false;
                 break;
             case PLAYFILE:
-                hp--;
+                CurrentHp--;
                 //增加计分
-                if (hp <= 0) {
+                if (CurrentHp <= 0) {
                     this.setLive(false);
                     EnemyManager.score++;
                 }
@@ -83,6 +95,29 @@ public class Enemy extends ElementObj{
             this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
         } else if (dir == EnemyManager.EnemyDir.DOWN) {
             this.setIcon(new ImageIcon("image/tank/bot/bot_down.png"));
+        }
+    }
+    public String getName(){
+       return this.name;
+    }
+    public void setName(String name){
+        this.name=name;
+    }
+    //血条
+    class BloodBar{
+        public static final int BAR_LENGTH=50;
+        public static final int BAR_HEIGHT=5;
+        public void draw(Graphics g){
+            //底色
+            g.setColor(Color.RED);
+            g.fillRect(getX(),getY()-10,BAR_LENGTH,BAR_HEIGHT);
+            //当前血量
+            g.setColor(Color.GREEN);
+            int w=BAR_LENGTH* CurrentHp /MaxHp;
+            g.fillRect(getX(),getY()-10,w,BAR_HEIGHT);
+            //边框
+            g.setColor(Color.BLACK);
+            g.drawRect(getX(),getY()-10,BAR_LENGTH,BAR_HEIGHT);
         }
     }
 }

@@ -69,8 +69,6 @@ public class GameMainJPanel extends JPanel implements Runnable{
 		while(true) {
 			this.repaint();
 			this.gameOver();
-			System.out.println("EnemyManager.enemies.size()"+EnemyManager.enemies.size());
-			System.out.println("EnemyManager.score"+EnemyManager.score);
 			//一般情况下，多线程都会使用一个休眠，控制速度
 			try {
 				Thread.sleep(ElementManager.RefreshTime);//休眠
