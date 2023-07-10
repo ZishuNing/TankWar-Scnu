@@ -19,6 +19,7 @@ public class Enemy extends ElementObj{
     private int MaxHp=5;
     private BloodBar bar=new BloodBar();
     private long aiTime;//敌人ai一段时间改变行为
+    private  int enemyTime = EnemyManager.getEnemyManager().getENEMY_AI_INTERVAL();
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(),this.getX(),this.getY(),this.getW(),this.getH(),null);
@@ -32,15 +33,13 @@ public class Enemy extends ElementObj{
     }
     @Override
     public ElementObj createElement(String str) {
-        Random random = new Random();
-        int x = random.nextInt(new GameJFrame().getX());
-        int y = random.nextInt(new GameJFrame().getY());
-        this.setX(x);
-        this.setY(y);
-        this.setW(50);
-        this.setH(50);
+        String[] arr = str.split(";");
+        this.setX(Integer.parseInt(arr[0]));
+        this.setY(Integer.parseInt(arr[1]));
+        this.setW(Integer.parseInt(arr[2]));
+        this.setH(Integer.parseInt(arr[3]));
         this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
-        this.obj_type = GameElement.ENEMY;
+        this.setObj_type(GameElement.ENEMY);
         this.name = EnemyManager.getRandomName();
         this.color = EnemyManager.getRandomColor();
         this.MaxHp=CurrentHp;
@@ -52,19 +51,23 @@ public class Enemy extends ElementObj{
     public void collide(GameElement type) {
         switch (type) {
             case MAPS:
-//                if(enemyAction== EnemyManager.EnemyAction.VERTICALMOVE){
-//                    if(dir== EnemyManager.EnemyDir.UP){
-//                        dir= EnemyManager.EnemyDir.DOWN;
-//                    }else {
-//                        dir = EnemyManager.EnemyDir.UP;
-//                    }
-//                }else if(enemyAction== EnemyManager.EnemyAction.HORIZONTALMOVE){
-//                    if(dir== EnemyManager.EnemyDir.LEFT){
-//                        dir= EnemyManager.EnemyDir.RIGHT;
-//                    }else {
-//                        dir= EnemyManager.EnemyDir.LEFT;
-//                    }
-//                }
+                if(enemyAction== EnemyManager.EnemyAction.VERTICALMOVE){
+                   if(dir== EnemyManager.EnemyDir.UP){
+                       dir= EnemyManager.EnemyDir.DOWN;
+                       HVSwitch_Flag = !HVSwitch_Flag;
+                   }else {
+                        dir = EnemyManager.EnemyDir.UP;
+                       HVSwitch_Flag = !HVSwitch_Flag;
+                  }
+               }else if(enemyAction== EnemyManager.EnemyAction.HORIZONTALMOVE){
+                   if(dir== EnemyManager.EnemyDir.LEFT){
+                       dir= EnemyManager.EnemyDir.RIGHT;
+                       HVSwitch_Flag = !HVSwitch_Flag;
+                   }else {
+                        dir= EnemyManager.EnemyDir.LEFT;
+                       HVSwitch_Flag = !HVSwitch_Flag;
+                    }
+              }
                 break;
             case ENEMY:
             case PLAY:
@@ -92,6 +95,7 @@ public class Enemy extends ElementObj{
                     if (newX >= GameJFrame.GameX - getW()) {
                         newX = GameJFrame.GameX - getW(); // 超出屏幕边界时，修正 x 坐标
                         HVSwitch_Flag = false;
+
                     }
                     setX(newX); // 更新 x 坐标
                 } else {
@@ -173,20 +177,21 @@ public class Enemy extends ElementObj{
     //AI行为
     private void enemyAi(){
         //每隔一段时间切换状态
-        if(System.currentTimeMillis()-aiTime>EnemyManager.ENEMY_AI_INTERVAL){
-            aiTime=System.currentTimeMillis();
-            int random=new Random().nextInt(3);
-            switch (random){
-                case 0:
-                    enemyAction= EnemyManager.EnemyAction.HORIZONTALMOVE;
-                    break;
-                case 1:
-                    enemyAction= EnemyManager.EnemyAction.VERTICALMOVE;
-                    break;
-                case 2:
-                    enemyAction= EnemyManager.EnemyAction.STOP;
-                    break;
-            }
+        if (System.currentTimeMillis() - aiTime > enemyTime) {
+            aiTime = System.currentTimeMillis();
+                enemyTime = EnemyManager.getEnemyManager().ENEMY_AI_INTERVAL;
+                int random = new Random().nextInt(3);
+                switch (random) {
+                    case 0:
+                        enemyAction = EnemyManager.EnemyAction.HORIZONTALMOVE;
+                        break;
+                    case 1:
+                        enemyAction = EnemyManager.EnemyAction.VERTICALMOVE;
+                        break;
+                    case 2:
+                        enemyAction = EnemyManager.EnemyAction.STOP;
+                        break;
+                }
         }
         //每帧随机开火
         if(Math.random()<=EnemyManager.ENEMY_FIRE_RATE){

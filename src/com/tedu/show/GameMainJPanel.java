@@ -41,15 +41,16 @@ public class GameMainJPanel extends JPanel implements Runnable{
 		//Set<GameElement> set = all.keySet(); //得到所有的key集合
 		for(GameElement ge:GameElement.values()) { //迭代器
 			List<ElementObj> list = all.get(ge);
-			for (ElementObj obj : list) {
-				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
+			for (int i=0;i<list.size();i++)
+			{
+				list.get(i).showElement(g);
 			}
 		}
 		// 显示当前得分
 		String scoreStr = "当前得分：" + EnemyManager.score;
 		Font font = new Font("宋体", Font.BOLD, 20);
 		g.setFont(font);
-		g.drawString(scoreStr, 750, 20);
+		g.drawString(scoreStr, 650, 20);
 	}
 
 //	public void gameOver() {
