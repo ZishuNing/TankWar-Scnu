@@ -11,9 +11,9 @@ import java.util.Random;
 public class EnemyManager {
     private static EnemyManager em;
     // 敌人集合
-    public static List<ElementObj> enemies;
+    private static List<ElementObj> enemies = new ArrayList<ElementObj>();
     //当前得分
-    public static int score = 0;
+    private static int score = 0;
     // 敌人方向枚举
     public enum EnemyDir{
         LEFT,RIGHT,UP,DOWN
@@ -35,12 +35,30 @@ public class EnemyManager {
         enemies.add(enemy);
     }
 
-    public static synchronized EnemyManager getEnemyManager() {
-        if(em == null) {//控制锁定
-            em = new EnemyManager();
-        }
-        return em;
+    public static int GetSize(){
+        return enemies.size();
     }
+
+    public static int GetScore(){
+        return score;
+    }
+
+    public static void AddScore(int a){
+        score += a;
+    }
+
+    public static void Clear(){
+        score = 0;
+        enemies.clear();
+
+    }
+
+//    public static synchronized EnemyManager getEnemyManager() {
+//        if(em == null) {//控制锁定
+//            em = new EnemyManager();
+//        }
+//        return em;
+//    }
     public static String getRandomName() {
         return MODIFIY[getRandomNumber(0, MODIFIY.length)] + "的" + NAMES[getRandomNumber(0, NAMES.length)];
     }

@@ -10,9 +10,11 @@ import com.tedu.show.GameMainJPanel;
 import java.io.*;
 
 public class GameStart {
+
+    public static GameJFrame gj;
     //程序入口
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        GameJFrame gj=new GameJFrame();
+        gj=new GameJFrame();
         GameMainJPanel jp=new GameMainJPanel();
         //实例化监听
 		GameListener listener = new GameListener();

@@ -29,7 +29,7 @@ public class GameJFrame extends JFrame {
 
     public void start() {
         if(jPanel!=null) {
-            this.add(jPanel);
+            this.getContentPane().add(jPanel);//将面板添加到窗体中
         }
         if(keyListener !=null) {
             this.addKeyListener(keyListener);
@@ -66,5 +66,9 @@ public class GameJFrame extends JFrame {
     }
     public void setThead(Thread thead) {
         this.thead = thead;
+    }
+
+    public JPanel getjPanel() {
+        return jPanel;
     }
 }

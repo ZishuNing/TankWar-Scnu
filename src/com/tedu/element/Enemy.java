@@ -61,7 +61,7 @@ public class Enemy extends ElementObj{
                 //增加计分
                 if (CurrentHp <= 0) {
                     this.setLive(false);
-                    EnemyManager.score++;
+                    EnemyManager.AddScore(1);
                 }
                 break;
         }

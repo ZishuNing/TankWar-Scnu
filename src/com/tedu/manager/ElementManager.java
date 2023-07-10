@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 
 /**
  * 单例元素管理器
@@ -20,34 +21,31 @@ public class ElementManager implements Serializable {
     //GameElement枚举是key，基类ElementObj是value
     private static Map<GameElement, List<ElementObj>> gameElements;
 
+    private static Lock gameElementsLock = new java.util.concurrent.locks.ReentrantLock();
 
-
-    public static void Serialize() throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get("src\\com\\tedu\\manager\\ElementManager.ser")));
-        oos.writeObject(gameElements);
-        oos.close();
+    public static void AcquireLock() {
+        gameElementsLock.lock();
     }
 
-    public static void DeSerialize() throws IOException, ClassNotFoundException {
-        FileInputStream fileIn = new FileInputStream("src\\com\\tedu\\manager\\ElementManager.ser");
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        gameElements = (Map<GameElement, List<ElementObj>>) in.readObject();
-        in.close();
-        fileIn.close();
-        System.out.println("Deserialized data:");
+    public static void ReleaseLock() {
+        gameElementsLock.unlock();
+    }
+
+    public static void destroy() {
+        gameElements.clear();
     }
 
 
     //map的get方法
-    public Map<GameElement, List<ElementObj>> getGameElements(){
+    public static Map<GameElement, List<ElementObj>> getGameElements(){
         return gameElements;
     }
     //添加元素
-    public void addElement(ElementObj obj,GameElement ge) {
+    public static synchronized void addElement(ElementObj obj,GameElement ge) {
         gameElements.get(ge).add(obj);
     }
     //依据key返回list
-    public List<ElementObj> getElementsByKey(GameElement ge){
+    public static List<ElementObj> getElementsByKey(GameElement ge){
         return gameElements.get(ge);
     }
     //单例
@@ -63,7 +61,7 @@ public class ElementManager implements Serializable {
         init();
     }
     //实例化方法
-    public void init() {//实例化在这里完成
+    public static void init() {//实例化在这里完成
         gameElements = new HashMap<GameElement, List<ElementObj>>();
 //      读取枚举创建集合放入gameElements
 		for(GameElement ge:GameElement.values()){

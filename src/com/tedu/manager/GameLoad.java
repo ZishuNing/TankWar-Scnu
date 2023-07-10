@@ -17,10 +17,18 @@ import java.util.*;
 public class GameLoad {
     private static ElementManager em = ElementManager.getManager();
 
-    public static void Init() throws IOException {
-        Load();
-        MapLoad(5);
+    public static int Cur_id = -1;
+
+    public static void Init(int id) {
+
+        if(Cur_id==-1){ // 只有第一次的时候才加载图片资源
+            Load();
+        }
+        Cur_id = id;
+        MapLoad(id);
+        loadPlay();
     }
+
 
     // 需要加图片就在这里添加，然后在 com/tedu/text/GameData.properties 中加入对应的内容
     public enum GameLoadEnum{
@@ -64,7 +72,7 @@ public class GameLoad {
         }
     }
 
-    public static void Load() throws IOException {
+    public static void Load() {
 
 
         try{
@@ -81,6 +89,22 @@ public class GameLoad {
         }
         catch(Exception e){
             System.out.println(e);
+        }
+    }
+
+    public static void loadPlay() {
+//		图片导入
+
+        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+//		讲对象放入到 元素管理器中
+//		em.getElementsByKey(GameElement.PLAY).add(obj);
+        em.addElement(obj, GameElement.PLAY);//直接添加
+
+        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
+        EnemyManager.Clear();
+        for (int i=0;i<2;i++)
+        {
+            em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
         }
     }
 

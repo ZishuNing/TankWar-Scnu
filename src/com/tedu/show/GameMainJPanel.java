@@ -12,6 +12,7 @@ import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 
 /**
  * @说明 游戏的主要面板
@@ -36,7 +37,9 @@ public class GameMainJPanel extends JPanel implements Runnable{
 	@Override  //用于绘画的    Graphics 画笔 专门用于绘画的
 	public void paint(Graphics g) {
 		super.paint(g);
-		
+
+
+		ElementManager.AcquireLock();
 		Map<GameElement, List<ElementObj>> all = em.getGameElements();
 		//Set<GameElement> set = all.keySet(); //得到所有的key集合
 		for(GameElement ge:GameElement.values()) { //迭代器
@@ -45,30 +48,19 @@ public class GameMainJPanel extends JPanel implements Runnable{
 				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
 			}
 		}
+		ElementManager.ReleaseLock();
 		// 显示当前得分
-		String scoreStr = "当前得分：" + EnemyManager.score;
+		String scoreStr = "当前得分：" + EnemyManager.GetScore();
 		Font font = new Font("宋体", Font.BOLD, 20);
 		g.setFont(font);
 		g.drawString(scoreStr, 750, 20);
 	}
 
-	public void gameOver() {
-		if(EnemyManager.enemies.size()==0) {
-			return;
-		}
-		if (EnemyManager.score == EnemyManager.enemies.size()) {
-			EndJPanel endPanel = new EndJPanel(EnemyManager.score);
-			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-			topFrame.setContentPane(endPanel);
-			topFrame.pack();
-			topFrame.setLocationRelativeTo(null);
-		}
-	}
+
 	@Override
 	public void run() {
 		while(true) {
 			this.repaint();
-			this.gameOver();
 			//一般情况下，多线程都会使用一个休眠，控制速度
 			try {
 				Thread.sleep(ElementManager.RefreshTime);//休眠

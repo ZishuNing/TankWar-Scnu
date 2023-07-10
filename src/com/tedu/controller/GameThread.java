@@ -3,12 +3,17 @@ package com.tedu.controller;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
 import com.tedu.element.Play;
+import com.tedu.game.GameStart;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.EnemyManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
+import com.tedu.show.EndJPanel;
+import com.tedu.show.GameJFrame;
+import com.tedu.show.GameMainJPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +27,7 @@ import java.util.Map;
 public class GameThread extends Thread {
 
     private ElementManager em=ElementManager.getManager();
-    private EnemyManager enemyManager = EnemyManager.getEnemyManager();
+//    private EnemyManager enemyManager = EnemyManager.getEnemyManager();
 
     @Override
     public void run() {// 游戏的run方法，主线程
@@ -37,8 +42,7 @@ public class GameThread extends Thread {
         }
         // 游戏进行时
         gameRun();
-        // 游戏结束时 资源回收
-        gameOver();
+
 
 
     }
@@ -48,8 +52,8 @@ public class GameThread extends Thread {
      */
     private void gameLoad() throws IOException, ClassNotFoundException {
 
-        GameLoad.Init();
-        loadPlay();
+        GameLoad.Init(5);
+
     }
     /**
      * 游戏进行
@@ -60,6 +64,7 @@ public class GameThread extends Thread {
     private void gameRun() {
         while(true){
             long gameTime = 0;
+            ElementManager.AcquireLock();
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
@@ -76,7 +81,11 @@ public class GameThread extends Thread {
             ElementPK(plays, playfiles);
             ElementPK(plays, enemies);
 
+
+            ElementManager.ReleaseLock();
             gameTime++;// 开游戏到现在经过的帧数
+
+            gameOver();
             try {
                 Thread.sleep(ElementManager.RefreshTime);//休眠
             } catch (InterruptedException e) {
@@ -135,22 +144,49 @@ public class GameThread extends Thread {
     /**
      * 游戏结束
      */
-    private void gameOver(){
+    public void gameOver() {
+        if(EnemyManager.GetSize()==0) {
+            return;
+        }
+        if (EnemyManager.GetScore() == EnemyManager.GetSize()) {
+            EndJPanel endPanel = new EndJPanel(EnemyManager.GetScore());
+            GameJFrame gj = GameStart.gj;
+            ElementManager.AcquireLock();
 
-    }
 
-    public void loadPlay() {
-//		图片导入
+            if(gj!= null){
+                System.out.println(gj);
 
-        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
-//		讲对象放入到 元素管理器中
-//		em.getElementsByKey(GameElement.PLAY).add(obj);
-        em.addElement(obj, GameElement.PLAY);//直接添加
+                Container contentPane = gj.getContentPane();
 
-        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
-            for (int i=0;i<3;i++)
-            {
-                em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
+
+                contentPane.remove(gj.getjPanel());
+
+                contentPane.add(endPanel);
+                contentPane.revalidate();
+                contentPane.repaint();
+
+                try{
+                    Thread.sleep(5000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+
+
+                ElementManager.init();
+                int next_id = GameLoad.Cur_id+1;
+                GameLoad.Init(next_id);
+
+                contentPane.remove(endPanel);
+                contentPane.add(gj.getjPanel());
+                contentPane.revalidate();
+                contentPane.repaint();
+
+                ElementManager.ReleaseLock();
             }
+
+        }
     }
+
+
 }
