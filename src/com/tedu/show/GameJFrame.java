@@ -24,7 +24,6 @@ public class GameJFrame extends JFrame {
         this.setTitle("坦克大战");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//退出+关闭
         this.setLocationRelativeTo(null);//居中显示
-
     }
 
     public void start() {

@@ -15,12 +15,15 @@ import java.awt.*;
 public class PlayFile extends ElementObj{
     private int attack;
     private int moveNum;
-    private ElementManager em = ElementManager.getManager();
+    GameLoad.GameLoadEnum dir;//子弹方向
+    BulletDir bulletDir;
+    public enum BulletDir{
+        UP,DOWN,LEFT,RIGHT
+    }
     PlayFile () {}
     //对构造函数封装(普通无图子弹)
-    public  ElementObj createPlayFile(ElementObj obj, int attack, int moveNum) {
-        this.setObj_type(GameElement.PLAYFILE);
-        this.dir = obj.getDir();
+    public  ElementObj createPlayFile(Play play, int attack, int moveNum) {
+        this.dir = play.dir;
         this.attack=attack;
         this.moveNum=moveNum;
         this.obj_type = GameElement.PLAYFILE;
@@ -32,40 +35,84 @@ public class PlayFile extends ElementObj{
             case enemy_up:
                 this.setX(obj.getX()+obj.getW()/2);
                 this.setY(obj.getY()-5);
+                bulletDir=BulletDir.UP;
                 break;
             case play1_down:
             case play2_down:
             case enemy_down:
                 this.setX(obj.getX()+obj.getW()/2);
                 this.setY(obj.getY()+obj.getH()+5);
+                bulletDir=BulletDir.DOWN;
                 break;
             case play1_left:
             case play2_left:
             case enemy_left:
                 this.setX(obj.getX());
                 this.setY(obj.getY()+obj.getH()/2);
+                bulletDir=BulletDir.LEFT;
                 break;
             case play1_right:
             case play2_right:
             case enemy_right:
                 this.setX(obj.getX()+obj.getW());
                 this.setY(obj.getY()+obj.getH()/2);
+                bulletDir=BulletDir.RIGHT;
                 break;
             default:
                 this.setX(obj.getX());
                 this.setY(obj.getY());
+                bulletDir=BulletDir.RIGHT;
                 break;
         }
         return this;
     }
-
+    public  ElementObj createEnemyBullet(Enemy enemy, int attack, int moveNum) {
+        this.attack=attack;
+        this.moveNum=moveNum;
+        this.obj_type = GameElement.PLAYFILE;
+        this.setW(10);
+        this.setH(10);
+        switch (enemy.dir) {
+            case UP:
+                bulletDir=BulletDir.UP;
+                this.setX(enemy.getX()+20);
+                this.setY(enemy.getY()-15);
+                break;
+            case DOWN:
+                bulletDir=BulletDir.DOWN;
+                this.setX(enemy.getX()+20);
+                this.setY(enemy.getY()+50);
+                break;
+            case LEFT:
+                bulletDir=BulletDir.LEFT;
+                this.setX(enemy.getX()-10);
+                this.setY(enemy.getY()+20);
+                break;
+            case RIGHT:
+                bulletDir=BulletDir.RIGHT;
+                this.setX(enemy.getX()+50);
+                this.setY(enemy.getY()+20);
+                break;
+            default:
+                bulletDir=BulletDir.RIGHT;
+                this.setX(enemy.getX());
+                this.setY(enemy.getY());
+                break;
+        }
+        return this;
+    }
     @Override
     public void collide(GameElement type) {
         switch (type){
             case PLAY:
             case MAPS:
             case BOSS:
+
                 this.setLive(false);
+                break;
+            case PLAYFILE:
+                break;
+            default:
                 break;
         }
     }
@@ -83,25 +130,17 @@ public class PlayFile extends ElementObj{
             this.setLive(false);
             return;
         }
-        switch (dir) {
-            case play1_up:
-            case play2_up:
-            case enemy_up:
+        switch (bulletDir) {
+            case UP:
                 this.setY(this.getY()-moveNum);
                 break;
-            case play1_down:
-            case play2_down:
-            case enemy_down:
+            case DOWN:
                 this.setY(this.getY()+moveNum);
                 break;
-            case play1_left:
-            case play2_left:
-            case enemy_left:
+            case LEFT:
                 this.setX(this.getX()-moveNum);
                 break;
-            case play1_right:
-            case play2_right:
-            case enemy_right:
+            case RIGHT:
                 this.setX(this.getX()+moveNum);
                 break;
             default:
