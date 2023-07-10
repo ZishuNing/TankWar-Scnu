@@ -52,23 +52,23 @@ public class GameMainJPanel extends JPanel implements Runnable{
 		g.drawString(scoreStr, 750, 20);
 	}
 
-	public void gameOver() {
-		if(EnemyManager.enemies.size()==0) {
-			return;
-		}
-		if (EnemyManager.score == EnemyManager.enemies.size()) {
-			EndJPanel endPanel = new EndJPanel(EnemyManager.score);
-			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-			topFrame.setContentPane(endPanel);
-			topFrame.pack();
-			topFrame.setLocationRelativeTo(null);
-		}
-	}
+//	public void gameOver() {
+//		if(EnemyManager.enemies.size()==0) {
+//			return;
+//		}
+//		if (EnemyManager.score == EnemyManager.enemies.size()) {
+//			EndJPanel endPanel = new EndJPanel(EnemyManager.score);
+//			JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//			topFrame.setContentPane(endPanel);
+//			topFrame.pack();
+//			topFrame.setLocationRelativeTo(null);
+//		}
+//	}
 	@Override
 	public void run() {
 		while(true) {
 			this.repaint();
-			this.gameOver();
+//			this.gameOver();
 			//一般情况下，多线程都会使用一个休眠，控制速度
 			try {
 				Thread.sleep(ElementManager.RefreshTime);//休眠

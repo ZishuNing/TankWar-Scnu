@@ -32,6 +32,9 @@ public class EnemyManager {
         enemies = new ArrayList<ElementObj>();
     }
     public static void RegisterEnemy(ElementObj enemy) {
+        if(enemies == null){
+            enemies = new ArrayList<ElementObj>();
+        }
         enemies.add(enemy);
     }
 

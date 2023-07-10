@@ -52,6 +52,20 @@ public class Enemy extends ElementObj{
     public void collide(GameElement type) {
         switch (type) {
             case MAPS:
+//                if(enemyAction== EnemyManager.EnemyAction.VERTICALMOVE){
+//                    if(dir== EnemyManager.EnemyDir.UP){
+//                        dir= EnemyManager.EnemyDir.DOWN;
+//                    }else {
+//                        dir = EnemyManager.EnemyDir.UP;
+//                    }
+//                }else if(enemyAction== EnemyManager.EnemyAction.HORIZONTALMOVE){
+//                    if(dir== EnemyManager.EnemyDir.LEFT){
+//                        dir= EnemyManager.EnemyDir.RIGHT;
+//                    }else {
+//                        dir= EnemyManager.EnemyDir.LEFT;
+//                    }
+//                }
+                break;
             case ENEMY:
             case PLAY:
             case BOSS:

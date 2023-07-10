@@ -15,21 +15,21 @@ import java.awt.*;
 public class PlayFile extends ElementObj{
     private int attack;
     private int moveNum;
-    GameLoad.GameLoadEnum dir;//子弹方向
+//    GameLoad.GameLoadEnum dir;//子弹方向
     BulletDir bulletDir;
     public enum BulletDir{
         UP,DOWN,LEFT,RIGHT
     }
     PlayFile () {}
     //对构造函数封装(普通无图子弹)
-    public  ElementObj createPlayFile(Play play, int attack, int moveNum) {
-        this.dir = play.dir;
+    public  ElementObj createPlayFile(Play obj, int attack, int moveNum) {
+
         this.attack=attack;
         this.moveNum=moveNum;
         this.obj_type = GameElement.PLAYFILE;
         this.setW(10);
         this.setH(10);
-        switch (dir) {
+        switch (obj.dir) {
             case play1_up:
             case play2_up:
             case enemy_up:
