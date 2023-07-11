@@ -26,7 +26,7 @@ public class EnemyManager {
     };
     private static final String[] MODIFIY = {"可爱", "傻傻", "萌萌", "羞差", "笨笨", "呆呆", "美丽", "聪明", "伶俐", "狡猾", "胖乎乎", "粉嫩嫩", "白胖胖", "漂亮", "可爱", "聪明", "懂事", "乖巧", "淘气", "淘气", "顽劣", "调皮", "顽皮", "天真", "可爱", "无邪", "单纯", "纯洁", "无暇", "纯真", "稚气", "温润", "好奇"};
     public   int ENEMY_AI_INTERVAL = 5000;
-    public static final double ENEMY_FIRE_RATE = 0.02;
+    public static final double ENEMY_FIRE_RATE = 0.005;
     private EnemyManager() {
         enemies = new ArrayList<ElementObj>();
     }

@@ -102,7 +102,6 @@ public class PlayFile extends ElementObj{
             case PLAY:
             case MAPS:
             case BOSS:
-
                 this.setLive(false);
                 break;
             case PLAYFILE:

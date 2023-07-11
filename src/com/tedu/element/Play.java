@@ -18,7 +18,7 @@ public class Play extends ElementObj implements Serializable {
     private boolean isMoving=false;
 
     private static int bias=GameLoad.GameLoadEnum.play2_up.ordinal()-GameLoad.GameLoadEnum.play1_up.ordinal(); // 两个枚举的偏移量
-    private int hp=500;//血量
+    private int hp=20;//血量
     private int safeValue = 30;//防穿模值
     ;//血量
     // 重构枚举
@@ -90,7 +90,8 @@ public class Play extends ElementObj implements Serializable {
         switch (type)
         {
             case PLAYFILE:
-                setHp(this.getHp()-1);
+                setHp(getHp()-1);
+                System.out.println("玩家"+getId()+"被子弹打中，血量："+getHp());
                 if (getHp()<=0)
                 {
                     this.setLive(false);
