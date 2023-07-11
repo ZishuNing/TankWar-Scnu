@@ -2,15 +2,13 @@ package com.tedu.element;
 
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
-import com.tedu.show.GameJFrame;
 
-import javax.swing.*;
 import java.awt.*;
 
 //玩家子弹类，由玩家调用和创建
 public class PlayFileDie extends ElementObj{
 
-    PlayFileDie () {}
+    PlayFileDie() {}
 
     @Override
     public void collide(GameElement type) {

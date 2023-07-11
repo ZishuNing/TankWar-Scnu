@@ -1,7 +1,6 @@
 package com.tedu.manager;
 
 import com.tedu.element.ElementObj;
-import com.tedu.element.Enemy;
 
 import java.awt.*;
 import java.util.ArrayList;

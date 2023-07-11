@@ -1,4 +1,6 @@
 package com.tedu.show;
+import com.tedu.manager.GameLoad;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,8 +9,8 @@ public class EndJPanel extends JPanel{
 
     public EndJPanel(int score) {
         setLayout(new BorderLayout());
-        scoreLabel = new JLabel("游戏结束，您的得分为：" + score, SwingConstants.CENTER);
-        scoreLabel.setFont(new Font("SansSerif", Font.BOLD, 32)); // 设置字体
+        scoreLabel = new JLabel("过关！得分为：" + score, SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("宋体", Font.BOLD, 28)); // 设置字体
         add(scoreLabel, BorderLayout.CENTER);
     }
     @Override

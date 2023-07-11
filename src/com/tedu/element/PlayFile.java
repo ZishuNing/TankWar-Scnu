@@ -1,14 +1,9 @@
 package com.tedu.element;
 
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
-import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
-import com.tedu.manager.GameLoad;
 import com.tedu.show.GameJFrame;
-import jdk.nashorn.internal.runtime.Debug;
 
-import javax.swing.*;
 import java.awt.*;
 
 //玩家子弹类，由玩家调用和创建
@@ -20,7 +15,7 @@ public class PlayFile extends ElementObj{
     public enum BulletDir{
         UP,DOWN,LEFT,RIGHT
     }
-    PlayFile () {}
+    PlayFile() {}
     //对构造函数封装(普通无图子弹)
     public  ElementObj createPlayFile(Play obj, int attack, int moveNum) {
 
