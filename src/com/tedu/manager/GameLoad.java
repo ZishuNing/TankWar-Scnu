@@ -118,7 +118,7 @@ public class GameLoad {
     public static void loadPlay(int id) {
 //		图片导入
 
-        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+        ElementObj obj=new Play(0,0,30,30,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
 //		讲对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
         em.addElement(obj, GameElement.PLAY);//直接添加

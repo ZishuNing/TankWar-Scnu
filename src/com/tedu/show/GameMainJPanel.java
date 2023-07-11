@@ -39,7 +39,7 @@ public class GameMainJPanel extends JPanel implements Runnable{
 		super.paint(g);
 
 
-		ElementManager.AcquireLock();
+		ElementManager.AcquireReadLock();
 		Map<GameElement, List<ElementObj>> all = em.getGameElements();
 		//Set<GameElement> set = all.keySet(); //得到所有的key集合
 		for(GameElement ge:GameElement.values()) { //迭代器
@@ -48,7 +48,7 @@ public class GameMainJPanel extends JPanel implements Runnable{
 				obj.showElement(g);//调用每个类的自己的show方法完成自己的显示
 			}
 		}
-		ElementManager.ReleaseLock();
+		ElementManager.ReleaseReadLock();
 		// 显示当前得分
 		String scoreStr = "当前得分：" + EnemyManager.GetScore();
 		Font font = new Font("宋体", Font.BOLD, 20);

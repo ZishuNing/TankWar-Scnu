@@ -55,6 +55,31 @@ public class GameThread extends Thread {
         GameLoad.Init(5);
 
     }
+
+    /**
+     * 碰撞检测
+     */
+    private void detectCollide(){
+        ElementManager.AcquireReadLock();
+        Map<GameElement, List<ElementObj>> all = em.getGameElements();
+        //Set<GameElement> set = all.keySet(); //得到所有的key集合
+
+        List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
+        List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
+        List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+        List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
+
+        //碰撞检测
+        ElementPK(enemies,playfiles);
+        ElementPK(playfiles,maps);
+        ElementPK(plays, maps);
+        ElementPK(plays, playfiles);
+        ElementPK(plays, enemies);
+
+        ElementManager.ReleaseReadLock();
+    }
+
+
     /**
      * 游戏进行
      * 1.玩家的移动、碰撞、死亡
@@ -64,25 +89,13 @@ public class GameThread extends Thread {
     private void gameRun() {
         while(true){
             long gameTime = 0;
-            ElementManager.AcquireLock();
-            Map<GameElement, List<ElementObj>> all = em.getGameElements();
-            //Set<GameElement> set = all.keySet(); //得到所有的key集合
 
-            List<ElementObj> playfiles = em.getElementsByKey(GameElement.PLAYFILE);
-            List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
-            List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
-            List<ElementObj> plays = em.getElementsByKey(GameElement.PLAY);
+            moveAndUpdate(gameTime);
 
-            moveAndUpdate(all,gameTime);
-            //碰撞检测
-            ElementPK(enemies,playfiles);
-            ElementPK(playfiles,maps);
-            ElementPK(plays, maps);
-            ElementPK(plays, playfiles);
-            ElementPK(plays, enemies);
+            detectCollide();
 
 
-            ElementManager.ReleaseLock();
+
             gameTime++;// 开游戏到现在经过的帧数
 
             gameOver();
@@ -124,7 +137,10 @@ public class GameThread extends Thread {
      * @param all 元素管理器中的元素集合
      * @param gameTime 某一帧
      */
-    private void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime){
+    private void moveAndUpdate(long gameTime){
+
+        ElementManager.AcquireReadLock();
+        Map<GameElement, List<ElementObj>> all = em.getGameElements();
         for(GameElement ge:GameElement.values()) { //迭代器
             List<ElementObj> list = all.get(ge);
             // 正确的在循环中的删除方法
@@ -133,13 +149,18 @@ public class GameThread extends Thread {
                 ElementObj obj = it.next();
                 if(!obj.getLive()){
                     // 需要调用死亡方法
+                    ElementManager.ReleaseReadLock();
+                    ElementManager.AcquireWriteLock();
                     obj.die(gameTime);
                     it.remove();
+                    ElementManager.ReleaseWriteLock();
+                    ElementManager.AcquireReadLock();
                     continue;
                 }
                 obj.update(gameTime);
             }
         }
+        ElementManager.ReleaseReadLock();
     }
     /**
      * 游戏结束
@@ -151,10 +172,9 @@ public class GameThread extends Thread {
         if (EnemyManager.GetScore() == EnemyManager.GetSize()) {
             EndJPanel endPanel = new EndJPanel(EnemyManager.GetScore());
             GameJFrame gj = GameStart.gj;
-            ElementManager.AcquireLock();
-
 
             if(gj!= null){
+                ElementManager.AcquireWriteLock();
                 System.out.println(gj);
 
                 Container contentPane = gj.getContentPane();
@@ -182,7 +202,7 @@ public class GameThread extends Thread {
                 contentPane.revalidate();
                 contentPane.repaint();
 
-                ElementManager.ReleaseLock();
+                ElementManager.ReleaseWriteLock();
             }
 
         }

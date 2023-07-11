@@ -56,8 +56,8 @@ public class Enemy extends ElementObj{
         this.isHorizontal=isHorizontal;
         this.setX(x);
         this.setY(y);
-        this.setW(50);
-        this.setH(50);
+        this.setW(30);
+        this.setH(30);
         this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
         this.obj_type = GameElement.ENEMY;
         this.name = EnemyManager.getRandomName();

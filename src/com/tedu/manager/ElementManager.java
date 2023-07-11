@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
-
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * 单例元素管理器
  * @author NZS
@@ -21,15 +21,26 @@ public class ElementManager implements Serializable {
     //GameElement枚举是key，基类ElementObj是value
     private static Map<GameElement, List<ElementObj>> gameElements;
 
-    private static Lock gameElementsLock = new java.util.concurrent.locks.ReentrantLock();
+    private static ReentrantReadWriteLock gameElementsLock =  new ReentrantReadWriteLock();
 
-    public static void AcquireLock() {
-        gameElementsLock.lock();
+
+    public static void AcquireReadLock() {
+        gameElementsLock.readLock().lock();
     }
 
-    public static void ReleaseLock() {
-        gameElementsLock.unlock();
+    public static void ReleaseReadLock() {
+        gameElementsLock.readLock().unlock();
     }
+
+    public static void AcquireWriteLock() {
+        gameElementsLock.writeLock().lock();
+    }
+
+    public static void ReleaseWriteLock() {
+        gameElementsLock.writeLock().unlock();
+    }
+
+
 
     public static void destroy() {
         gameElements.clear();
