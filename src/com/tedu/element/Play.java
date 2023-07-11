@@ -18,7 +18,7 @@ public class Play extends ElementObj implements Serializable {
     private boolean isMoving=false;
 
     private static int bias=GameLoad.GameLoadEnum.play2_up.ordinal()-GameLoad.GameLoadEnum.play1_up.ordinal(); // 两个枚举的偏移量
-    private int hp=100;//血量
+    private int hp=500;//血量
     private int safeValue = 30;//防穿模值
     ;//血量
     // 重构枚举
