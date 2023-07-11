@@ -164,14 +164,14 @@ public class Enemy extends ElementObj{
         public void draw(Graphics g){
             //底色
             g.setColor(Color.RED);
-            g.fillRect(getX(),getY()-10,BAR_LENGTH,BAR_HEIGHT);
+            g.fillRect(getX()-10,getY()-10,BAR_LENGTH,BAR_HEIGHT);
             //当前血量
             g.setColor(Color.GREEN);
             int w=BAR_LENGTH* CurrentHp /MaxHp;
-            g.fillRect(getX(),getY()-10,w,BAR_HEIGHT);
+            g.fillRect(getX()-10,getY()-10,w,BAR_HEIGHT);
             //边框
             g.setColor(Color.BLACK);
-            g.drawRect(getX(),getY()-10,BAR_LENGTH,BAR_HEIGHT);
+            g.drawRect(getX()-10,getY()-10,BAR_LENGTH,BAR_HEIGHT);
         }
     }
     //AI行为
