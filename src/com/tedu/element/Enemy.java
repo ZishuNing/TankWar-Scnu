@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class Enemy extends ElementObj{
     private boolean HVSwitch_Flag =false;//用于变换移动方向的flag
+    public boolean isHorizontal;//用于判断是否是水平移动
     private String name;
     private Color color;
     EnemyManager.EnemyDir dir= EnemyManager.EnemyDir.RIGHT;
@@ -35,6 +36,24 @@ public class Enemy extends ElementObj{
         Random random = new Random();
         int x = random.nextInt(new GameJFrame().getX());
         int y = random.nextInt(new GameJFrame().getY());
+        this.setX(x);
+        this.setY(y);
+        this.setW(50);
+        this.setH(50);
+        this.setIcon(new ImageIcon("image/tank/bot/bot_up.png"));
+        this.obj_type = GameElement.ENEMY;
+        this.name = EnemyManager.getRandomName();
+        this.color = EnemyManager.getRandomColor();
+        this.MaxHp=CurrentHp;
+        this.aiTime=System.currentTimeMillis();//敌人创建开始计时
+        EnemyManager.RegisterEnemy(this);
+        return this;
+    }
+    public ElementObj createElement(String str,boolean isHorizontal) {
+        Random random = new Random();
+        int x = random.nextInt(new GameJFrame().getX());
+        int y = random.nextInt(new GameJFrame().getY());
+        this.isHorizontal=isHorizontal;
         this.setX(x);
         this.setY(y);
         this.setW(50);
@@ -158,21 +177,11 @@ public class Enemy extends ElementObj{
     }
     //AI行为
     private void enemyAi(){
-        //每隔一段时间切换状态
-        if(System.currentTimeMillis()-aiTime>EnemyManager.ENEMY_AI_INTERVAL){
-            aiTime=System.currentTimeMillis();
-            int random=new Random().nextInt(3);
-            switch (random){
-                case 0:
-                    enemyAction= EnemyManager.EnemyAction.HORIZONTALMOVE;
-                    break;
-                case 1:
-                    enemyAction= EnemyManager.EnemyAction.VERTICALMOVE;
-                    break;
-                case 2:
-                    enemyAction= EnemyManager.EnemyAction.STOP;
-                    break;
-            }
+        //水平或垂直移动
+        if(isHorizontal){
+            enemyAction= EnemyManager.EnemyAction.HORIZONTALMOVE;
+        }else {
+            enemyAction= EnemyManager.EnemyAction.VERTICALMOVE;
         }
         //每帧随机开火
         if(Math.random()<=EnemyManager.ENEMY_FIRE_RATE){

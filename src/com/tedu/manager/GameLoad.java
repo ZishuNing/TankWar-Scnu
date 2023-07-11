@@ -26,7 +26,7 @@ public class GameLoad {
         }
         Cur_id = id;
         MapLoad(id);
-        loadPlay();
+        loadPlay(id);
     }
 
 
@@ -91,7 +91,15 @@ public class GameLoad {
             System.out.println(e);
         }
     }
-
+    public static void clear(){
+        pro.clear();
+        EnemyManager.enemies.clear();
+        ImgMap.clear();
+        Map<GameElement,List<ElementObj>> all=em.getGameElements();
+        for(GameElement ge:all.keySet()){
+            all.get(ge).clear();
+        }
+    }
     public static void loadPlay() {
 //		图片导入
 
@@ -102,10 +110,41 @@ public class GameLoad {
 
         // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
         EnemyManager.Clear();
-        for (int i=0;i<2;i++)
+        for (int i=0;i<5;i++)
         {
-            em.addElement(new Enemy().createElement(""),GameElement.ENEMY);
+            em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);
         }
     }
+    public static void loadPlay(int id) {
+//		图片导入
 
+        ElementObj obj=new Play(0,0,50,50,GameLoad.ImgMap.get(GameLoad.GameLoadEnum.play1_up));//实例化对象
+//		讲对象放入到 元素管理器中
+//		em.getElementsByKey(GameElement.PLAY).add(obj);
+        em.addElement(obj, GameElement.PLAY);//直接添加
+
+        // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
+        EnemyManager.Clear();
+        if(id==5){
+            for (int i=0;i<5;i++)
+            {
+                em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);
+            }
+        }else if(id==6){
+            for (int i=0;i<5;i++)
+            {
+                em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);
+            }
+            for (int i=0;i<5;i++)
+            {
+                em.addElement(new Enemy().createElement("",false),GameElement.ENEMY);
+            }
+        }else{
+            for (int i=0;i<5;i++)
+            {
+                em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);
+            }
+        }
+
+    }
 }

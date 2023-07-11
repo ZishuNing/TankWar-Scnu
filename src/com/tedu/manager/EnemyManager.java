@@ -11,7 +11,7 @@ import java.util.Random;
 public class EnemyManager {
     private static EnemyManager em;
     // 敌人集合
-    private static List<ElementObj> enemies = new ArrayList<ElementObj>();
+    public static List<ElementObj> enemies = new ArrayList<ElementObj>();
     //当前得分
     private static int score = 0;
     // 敌人方向枚举
