@@ -52,7 +52,7 @@ public class GameThread extends Thread {
      */
     private void gameLoad() throws IOException, ClassNotFoundException {
 
-        GameLoad.Init(5);
+        GameLoad.Init(1);
 
     }
 
@@ -170,41 +170,48 @@ public class GameThread extends Thread {
             return;
         }
         if (EnemyManager.GetScore() == EnemyManager.GetSize()) {
-            EndJPanel endPanel = new EndJPanel(EnemyManager.GetScore());
-            GameJFrame gj = GameStart.gj;
+            Reload(1,true);
+        }
+        ElementObj obj = ElementManager.getElementsByKey(GameElement.PLAY).get(0);
+        if(!obj.getLive()){// 玩家死亡
+            Reload(0,false);
+        }
+    }
 
-            if(gj!= null){
-                ElementManager.AcquireWriteLock();
-                System.out.println(gj);
+    private void Reload(int bia_map_id, boolean win) {
+        EndJPanel endPanel = new EndJPanel(EnemyManager.GetScore(), win);
+        GameJFrame gj = GameStart.gj;
+        if(gj!= null){
+            ElementManager.AcquireWriteLock();
+            System.out.println(gj);
 
-                Container contentPane = gj.getContentPane();
-
-
-                contentPane.remove(gj.getjPanel());
-
-                contentPane.add(endPanel);
-                contentPane.revalidate();
-                contentPane.repaint();
-
-                try{
-                    Thread.sleep(5000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
+            Container contentPane = gj.getContentPane();
 
 
-                ElementManager.init();
-                int next_id = GameLoad.Cur_id+1;
-                GameLoad.Init(next_id);
+            contentPane.remove(gj.getjPanel());
 
-                contentPane.remove(endPanel);
-                contentPane.add(gj.getjPanel());
-                contentPane.revalidate();
-                contentPane.repaint();
+            contentPane.add(endPanel);
+            contentPane.revalidate();
+            contentPane.repaint();
 
-                ElementManager.ReleaseWriteLock();
+            try{
+                Thread.sleep(5000);
+            }catch (InterruptedException e){
+                e.printStackTrace();
             }
 
+
+            ElementManager.init();
+            int next_id = GameLoad.Cur_id+bia_map_id;
+            GameLoad.Init(next_id);
+
+            contentPane.remove(endPanel);
+            contentPane.add(gj.getjPanel());
+            contentPane.revalidate();
+            contentPane.repaint();
+
+            ElementManager.ReleaseWriteLock();
+            return;
         }
     }
 

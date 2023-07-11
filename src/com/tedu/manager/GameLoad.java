@@ -125,12 +125,12 @@ public class GameLoad {
 
         // 采用for循环方式向元素集合中添加敌人,默认设置为10个敌人,str的内容为敌人数据
         EnemyManager.Clear();
-        if(id==5){
+        if(id==1){
             for (int i=0;i<5;i++)
             {
                 em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);
             }
-        }else if(id==6){
+        }else if(id==2){
             for (int i=0;i<5;i++)
             {
                 em.addElement(new Enemy().createElement("",true),GameElement.ENEMY);

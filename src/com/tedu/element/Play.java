@@ -14,7 +14,7 @@ public class Play extends ElementObj{
     private boolean pkType=false;//攻击状态 true则攻击
     private boolean isMoving=false;
 
-    private int hp=100;//血量
+    private int hp=20;//血量
     // 重构枚举
     public GameLoad.GameLoadEnum dir;
 
@@ -149,5 +149,9 @@ public class Play extends ElementObj{
                     break;
             }
         }
+    }
+
+    public int getHp() {
+        return hp;
     }
 }
