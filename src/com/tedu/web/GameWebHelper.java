@@ -9,21 +9,15 @@ public class GameWebHelper {
 
     public static GameClient gameClient;
     public static GameServer gameServer;
-
     public static Lock lock = new java.util.concurrent.locks.ReentrantLock();
     public static Condition loaded = lock.newCondition();
     public static boolean isLoad;
-
     public static void setGameClient(GameClient game_client) {
         gameClient = game_client;
     }
-
     public static void setGameServer(GameServer game_server) {
         gameServer = game_server;
     }
-
-
-
     public static void boardCast(Play play){
         if(gameServer != null){
             try {

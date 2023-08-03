@@ -9,16 +9,13 @@ class Peer implements Serializable {
         this.IPAddress = IPAddress;
         this.port = port;
     }
-
     public String toString() {
         return IPAddress.getHostName() + ":" + port;
     }
-
     public static Peer fromString(String str) throws UnknownHostException {
         String[] strs = str.split(":");
         return new Peer(InetAddress.getByName(strs[0]), Integer.parseInt(strs[1]));
     }
-
     public InetAddress IPAddress;
     public int port;
 }

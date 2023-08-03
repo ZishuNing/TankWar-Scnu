@@ -12,21 +12,14 @@ import java.io.*;
 import java.util.*;
 public class Task implements Runnable {
     private int taskId;
-
     enum TaskType {
         SEND, SERVER_RECEIVE, CLIENT_RECEIVE
     }
-
     private TaskType taskType;
     private DatagramPacket packet;
-
     private DatagramSocket serverSocket;
     private GameServer gameServer;
-
     private GameClient gameClient;
-
-
-
     public Task(int taskId, TaskType ttype, DatagramPacket packet, DatagramSocket serverSocket, GameServer gameServer, GameClient gameClient) {
         this.taskId = taskId;
         this.taskType = ttype;
@@ -35,7 +28,6 @@ public class Task implements Runnable {
         this.gameServer = gameServer;
         this.gameClient = gameClient;
     }
-
     public void run() {
         System.out.println("Task #" + taskId + " is running." + taskType);
 
@@ -61,11 +53,8 @@ public class Task implements Runnable {
                 }
                 break;
         }
-
         System.out.println("Task #" + taskId + " is done.");
     }
-
-
     // 服务器和客户端都调用的发送数据的方法
     private void send() throws IOException {
         try{
@@ -75,7 +64,6 @@ public class Task implements Runnable {
             e.printStackTrace();
         }
     }
-
     private void clientReceive() throws IOException, ClassNotFoundException {
 
         Data recedata = Data.Deserialize(packet.getData());
@@ -104,15 +92,8 @@ public class Task implements Runnable {
             elementObj.setId(id);
 
             ElementManager.getManager().addElement(elementObj, GameElement.PLAY);
-
-
-
             Play.setMainPlayId(id);
-
             gameClient.boardCast((Play) elementObj);
-
-
-
             // 通知主线程可以Client已经加载完毕
             GameWebHelper.lock.lock();
             GameWebHelper.isLoad = true;
@@ -130,44 +111,31 @@ public class Task implements Runnable {
             gameClient.addPeer(Peer.fromString(new String(recedata.data)));
         }
     }
-
-
     // 服务器调用的处理接收到的数据的方法
     private void serverReceive() {
 
         try {
 
-            // 将接收到的数据原样返回给客户端
             InetAddress IPAddress = packet.getAddress();
             int port = packet.getPort();
             byte[] receData = packet.getData();
-
             Data data = Data.Deserialize(receData);
             if(data.type==Data.Type.HELLO){
                 System.out.println("Hello from " + IPAddress + ":" + port);
-
                 // 序列化一个 ElementManager 对象，然后发送给客户端
                 Data send_data = new Data(Data.Type.HELLO_REPLY, ElementManager.getManager().getGameElements(), gameServer.getPeers(), null);
                 byte[] send = send_data.serialize();
                 DatagramPacket sendPacket = new DatagramPacket(send, send.length, IPAddress, port);
-
                 System.out.println("sent size:"+sendPacket.getLength());
                 serverSocket.send(sendPacket);
-
                 Peer peer = new Peer(IPAddress, port);
-
                 gameServer.boardCast(peer);
-
                 gameServer.addPeer(peer);
 
             }else if(data.type == Data.Type.PLAY_STATUS){
                 System.out.println("play_status from"+ packet.getAddress() + ":" + packet.getPort());
-
                 ElementManager.getManager().updatePlayElement(Play.FromString(new String(data.data)));
-
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
